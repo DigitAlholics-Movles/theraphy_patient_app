@@ -51,7 +51,7 @@ var searchedText: String = ""
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppointmentList(patients: List<Patient>,appointments: List<Appointment>, selectAppointment: (String)-> Unit){
+fun AppointmentList(size: Number, appointments: List<Appointment>, selectAppointment: (String)-> Unit){
 
 
     Column(modifier = Modifier.padding(17.dp), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -81,12 +81,18 @@ fun AppointmentList(patients: List<Patient>,appointments: List<Appointment>, sel
 
 
         }
-        Text(text = patients.size.toString())
-        Text(text = appointments.size.toString())
+        //Text(text = patients.size.toString())
+        //Text(text = appointments.size.toString())
         LazyColumn(Modifier.height(500.dp)){
             itemsIndexed(appointments){ index, item ->
-                AppointmentItem(patients, item){
+                AppointmentItem(item){
                     selectAppointment("${index + 1}")
+
+                }
+
+                AppointmentItem(item){
+                    selectAppointment("${index + 1}")
+
                 }
             }
         }
@@ -128,15 +134,15 @@ fun AppointmentList(patients: List<Patient>,appointments: List<Appointment>, sel
 @SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AppointmentItem(patients: List<Patient>,appointment: Appointment, selectAppointment: () -> Unit) {
+private fun AppointmentItem(appointment: Appointment, selectAppointment: () -> Unit) {
     var name = " "
-
-    for(patient in patients){
+    //var patient = appointment.patient.to(Patient)
+   /* for(patient in patients){
         //Text(text = appointment.physiotherapistId)
         //Text(text = appointment.patient)
-        if(patient.id == appointment.patientId)
+        if(patient.id == appointment.patient)
             name = patient.firstName + " " + patient.lastName
-    }
+    }*/
     
 
     Row() {
@@ -157,7 +163,7 @@ private fun AppointmentItem(patients: List<Patient>,appointment: Appointment, se
                         .border(BorderStroke(5.dp, Color.White))
                 )
                 Column() {
-                    Text(text = name, fontWeight = FontWeight.ExtraBold,
+                    Text(text = appointment.patient.firstName + " " +appointment.patient.lastName, fontWeight = FontWeight.ExtraBold,
                         modifier = Modifier.absolutePadding(bottom = 15.dp))
                     Row() {
                         Box(contentAlignment = Alignment.Center,

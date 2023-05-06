@@ -7,6 +7,6 @@ data class Appointment(
     val done: String,
     val scheduledDate: String,
     val topic: String,
-    val patientId: String,
-    val physiotherapist: String
+    val patient: Patient,
+    val physiotherapist_id: String
 )
