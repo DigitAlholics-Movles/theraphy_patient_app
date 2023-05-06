@@ -17,7 +17,6 @@ fun PatientList(patients: List<Patient>, selectPatient: (String)-> Unit){
     LazyColumn(){
         itemsIndexed(patients){ index, item ->
             PatientItem(item){
-
                 selectPatient("${index + 1}")
             }
         }
@@ -34,13 +33,7 @@ private fun PatientItem(patient: Patient, selectPatient: () -> Unit){
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
-            //Text(text = patient.id)
-            Column{
-                Text(text = "Name: ${patient.firstName}")
-                Text(text = "LastName: ${patient.lastName}")
-                Text(text = "Email: ${patient.email}")
-                Text(text = "birthdat: ${patient.birthdayDate}")
-            }
+            Text(text = patient.id)
         }
     }
 }

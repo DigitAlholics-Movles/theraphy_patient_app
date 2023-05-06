@@ -58,5 +58,32 @@ fun Navigation() {
             )
         }
 
+        composable(
+            "patient/{index}",
+            arguments = listOf(navArgument("index") { type = NavType.StringType})
+        ){
+            val index = it.arguments?.getString("index") as String
+
+            val patients = remember {
+                mutableStateOf(Patient("1","Jose","Del Carpio","20","30","jose@gmail.com","2","https://img.europapress.es/fotoweb/fotonoticia_20081004164743_420.jpg"))
+            }
+
+            val driverInterface = ApiClient.build()
+            val getDriver = driverInterface.getPatientById(index)
+
+            getDriver.enqueue(object : Callback<Patient>{
+                override fun onResponse(call: Call<Patient>, response: Response<Patient>) {
+                    if (response.isSuccessful) {
+                        patients.value = response.body()!!
+                    }
+                }
+
+                override fun onFailure(call: Call<Patient>, t: Throwable) {
+                }
+            })
+
+            PatientDetails(patient = patients.value)
+        }
+
     }
 }
