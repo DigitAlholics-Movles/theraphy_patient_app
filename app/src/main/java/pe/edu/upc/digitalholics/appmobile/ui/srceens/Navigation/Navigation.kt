@@ -32,7 +32,6 @@ fun Navigation() {
 
             //PatientDetails(patient = patients.value)
 
-            /*
             val patientInterface = ApiClient.build()
             val getAllPatients = patientInterface.getAllPatients()
 
@@ -56,7 +55,7 @@ fun Navigation() {
                 selectPatient = { index ->
                     navController.navigate("patient/$index")
                }
-            )*/
+            )
         }
 
     }
