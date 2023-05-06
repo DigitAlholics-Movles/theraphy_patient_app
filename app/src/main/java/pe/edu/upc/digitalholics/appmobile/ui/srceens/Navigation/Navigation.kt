@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import pe.edu.upc.digitalholics.appmobile.data.model.Patient
+import pe.edu.upc.digitalholics.appmobile.data.model.Physiotherapist
 import pe.edu.upc.digitalholics.appmobile.data.model.Treatment
 import pe.edu.upc.digitalholics.appmobile.data.remote.ApiClient
 import pe.edu.upc.digitalholics.appmobile.data.remote.ApiResponse
@@ -17,6 +18,7 @@ import pe.edu.upc.digitalholics.appmobile.data.remote.TreatmentResponse
 import pe.edu.upc.digitalholics.appmobile.ui.srceens.PatientList.PatientList
 //import pe.edu.upc.digitalholics.appmobile.ui.srceens.PatientsDetails.Patient
 import pe.edu.upc.digitalholics.appmobile.ui.srceens.PatientsDetails.PatientDetails
+import pe.edu.upc.digitalholics.appmobile.ui.srceens.TreatmentDetails.TreatmentDetails
 import pe.edu.upc.digitalholics.appmobile.ui.srceens.TreatmentList.Treatments
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,7 +28,7 @@ import retrofit2.Response
 fun Navigation() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "TreatmentList") {
+    NavHost(navController = navController, startDestination = "PatientList") {
         composable("PatientList") {
             val patients = remember {
                 //mutableStateOf(Patient("1","Jose","Del Carpio","20","30","jose@gmail.com","2","https://img.europapress.es/fotoweb/fotonoticia_20081004164743_420.jpg"))
@@ -134,7 +136,40 @@ fun Navigation() {
             )
         }
 
-        //treatmentAdd
+        //treatmentDetail
+        composable(
+            "treatment/{index}",
+            arguments = listOf(navArgument("index") { type = NavType.StringType })
+        ) {
+            val index = it.arguments?.getString("index") as String
+            val physiotherapist = Physiotherapist("1", "Roberto","Loza","Perez","45","4","Lima",
+                "","04/05/1994","20","Neck","roberto@email.com","2")
+
+
+            val treatments = remember {
+                mutableStateOf(
+                    Treatment(
+                        "1","Lumbar Spine","Medicines may include nonsteroidal, anti-inflammatory medicines that relieve pain and swelling, and steroid injections that reduce swelling. Surgical treatments include removing bone spurs and widening the space between vertebrae. The lower back may also be stabilized by fusing together some of the vertebrae.","https://post.healthline.com/wp-content/uploads/2020/08/642x361-Treating_Spinal_Stenosis-Exercise_Surgery_and_More.jpg","25",physiotherapist
+                    )
+                )
+            }
+
+            val treatmentInterface = ApiClient.buildTreatmentInterface()
+            val getTreatment = treatmentInterface.getTreatmentById(index)
+
+            getTreatment.enqueue(object : Callback<Treatment> {
+                override fun onResponse(call: Call<Treatment>, response: Response<Treatment>) {
+                    if (response.isSuccessful) {
+                        treatments.value = response.body()!!
+                    }
+                }
+
+                override fun onFailure(call: Call<Treatment>, t: Throwable) {
+                }
+            })
+
+            TreatmentDetails(treatment = treatments.value)
+        }
 
 
     }
