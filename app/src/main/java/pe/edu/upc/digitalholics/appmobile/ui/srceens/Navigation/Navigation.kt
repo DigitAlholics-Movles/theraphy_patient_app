@@ -22,45 +22,30 @@ import pe.edu.upc.digitalholics.appmobile.ui.srceens.PatientsDetails.PatientDeta
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.Console
 
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "AppointmentList") {
+    NavHost(navController = navController, startDestination = "PatientList") {
         composable("AppointmentList") {
-            val patients = remember {
-                //mutableStateOf(Patient("1","Jose","Del Carpio","20","30","jose@gmail.com","2","https://img.europapress.es/fotoweb/fotonoticia_20081004164743_420.jpg"))
-                mutableStateOf(emptyList<Patient>())
-            }
-
-            //PatientDetails(patient = patients.value)
-
-            val patientInterface = ApiClient.build()
-            val getAllPatients = patientInterface.getAllPatients()
-
-            getAllPatients.enqueue(object : Callback<ApiResponse> {
-                override fun onResponse(
-                    call: Call<ApiResponse>,
-                    response: Response<ApiResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        patients.value = response.body()?.patients!!
-
-                    }
-                }
-
-                override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-
-                }
-            })
-
 
             val appointments = remember {
+                //mutableStateOf(Appointment("1","Jose","Del Carpio","20","30","jose@gmail.com","2"))
                 mutableStateOf(emptyList<Appointment>())
             }
 
-            //PatientDetails(patient = patients.value)
+            AppointmentList(
+                //patients = patients.value,
+                size=appointments.value.size,
+                appointments = appointments.value,
+                selectAppointment = {
+                    //navController.navigate("appointment/$index")
+                }
+            )
+
+            //AppointmentList(0, appointments = appointments.value)
 
             val appointmentInterface = ApiClientAppointment.build()
             val getAllAppointment = appointmentInterface.getAllAppointments()
@@ -77,16 +62,12 @@ fun Navigation() {
                 }
 
                 override fun onFailure(call: Call<AppointmentResponse>, t: Throwable) {
-
                 }
             })
-            AppointmentList(
-                patients = patients.value,
-                appointments = appointments.value,
-                selectAppointment = { index ->
-                    //navController.navigate("appointment/$index")
-                }
-            )
+            //appointments.value. +=
+
+
+
         }
 
 
@@ -117,6 +98,7 @@ fun Navigation() {
 
                 }
             })
+
             PatientList(
                 patients = patients.value,
                 selectPatient = { index ->
