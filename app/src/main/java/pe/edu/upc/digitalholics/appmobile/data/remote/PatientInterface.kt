@@ -14,4 +14,8 @@ interface PatientInterface {
     @GET("patients/{index}")
     fun getPatientById(@Path("index")index: String): Call<Patient>
 
+
+
+
+
 }
