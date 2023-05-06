@@ -1,7 +1,6 @@
-package pe.edu.upc.digitalholics.appmobile.ui.srceens.PatientList
+package pe.edu.upc.digitalholics.appmobile.ui.srceens.AppointmentList
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,7 +28,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -44,23 +41,22 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import pe.edu.upc.digitalholics.appmobile.R
+import pe.edu.upc.digitalholics.appmobile.data.model.Appointment
 import pe.edu.upc.digitalholics.appmobile.data.model.Patient
 
 var searchedText: String = ""
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PatientList(patients: List<Patient>, selectPatient: (String)-> Unit){
+fun AppointmentList(patients: List<Patient>,appointments: List<Appointment>, selectAppointment: (String)-> Unit){
 
 
     Column(modifier = Modifier.padding(17.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            text = "My Patients", fontSize = 25.sp, fontWeight = FontWeight.Bold,
+            text = "My Appointments", fontSize = 25.sp, fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .absolutePadding(bottom = 20.dp)
         )
@@ -85,10 +81,12 @@ fun PatientList(patients: List<Patient>, selectPatient: (String)-> Unit){
 
 
         }
+        Text(text = patients.size.toString())
+        Text(text = appointments.size.toString())
         LazyColumn(Modifier.height(500.dp)){
-            itemsIndexed(patients){ index, item ->
-                PatientItem(item){
-                    selectPatient("${index + 1}")
+            itemsIndexed(appointments){ index, item ->
+                AppointmentItem(patients, item){
+                    selectAppointment("${index + 1}")
                 }
             }
         }
@@ -126,22 +124,29 @@ fun PatientList(patients: List<Patient>, selectPatient: (String)-> Unit){
 
 }
 
+
 @SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PatientItem(patient: Patient, selectPatient: () -> Unit){
-    if(patient.firstName.contains(searchedText) || patient.lastName.contains(searchedText))
+private fun AppointmentItem(patients: List<Patient>,appointment: Appointment, selectAppointment: () -> Unit) {
+    var name = " "
+
+    for(patient in patients){
+        //Text(text = appointment.physiotherapistId)
+        //Text(text = appointment.patient)
+        if(patient.id == appointment.patientId)
+            name = patient.firstName + " " + patient.lastName
+    }
+    
+
     Row() {
-        Card(onClick = {
-            selectPatient ()
-        },
-            modifier = Modifier
-                .absolutePadding(top = 15.dp, bottom = 15.dp)
-                .fillMaxWidth()
+        Card(modifier = Modifier
+            .absolutePadding(top = 15.dp, bottom = 15.dp)
+            .fillMaxWidth()
         ) {
             Row(verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .background(Color(0, 122, 240))
+                    .background(Color(212, 98, 155))
                     .fillMaxWidth()) {
                 Image(painter = painterResource(id = R.drawable.ghost),
                     contentDescription = null,
@@ -152,29 +157,41 @@ private fun PatientItem(patient: Patient, selectPatient: () -> Unit){
                         .border(BorderStroke(5.dp, Color.White))
                 )
                 Column() {
-                    Text(text = patient.firstName + " " + patient.lastName, fontWeight = FontWeight.ExtraBold,
+                    Text(text = name, fontWeight = FontWeight.ExtraBold,
                         modifier = Modifier.absolutePadding(bottom = 15.dp))
                     Row() {
                         Box(contentAlignment = Alignment.Center,
                             modifier = Modifier
                                 .height(25.dp)
-                                .width(57.dp)
+                                .width(65.dp)
                                 .absolutePadding(right = 8.dp)
                                 .clip(shape = RoundedCornerShape(8.dp))
                                 .background(Color(255, 255, 255))
                         ) {
-                            Text(text = "Age: " + patient.age, fontSize = 10.sp,
+                            Text(text = appointment.topic, fontSize = 10.sp,
                                 modifier = Modifier.background(Color(255,255,255)))
                         }
                         Box(contentAlignment = Alignment.Center,
                             modifier = Modifier
                                 .height(25.dp)
-                                .width(200.dp)
+                                .width(90.dp)
                                 .absolutePadding(right = 10.dp)
                                 .clip(shape = RoundedCornerShape(8.dp))
                                 .background(Color(255, 255, 255))
                         ) {
-                            Text(text = "Appointment Consultations: " + patient.appointmentQuantity, fontSize = 10.sp)
+                            Text(text = appointment.scheduledDate, fontSize = 10.sp)
+
+                        }
+
+                        Box(contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .height(25.dp)
+                                .width(60.dp)
+                                .absolutePadding(right = 10.dp)
+                                .clip(shape = RoundedCornerShape(8.dp))
+                                .background(Color(255, 255, 255))
+                        ) {
+                            Text(text = "4:00 pm", fontSize = 10.sp)
                         }
                     }
 
@@ -183,7 +200,6 @@ private fun PatientItem(patient: Patient, selectPatient: () -> Unit){
             }
 
         }
-
-
     }
+
 }
