@@ -28,7 +28,7 @@ import retrofit2.Response
 fun Navigation() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "PatientList") {
+    NavHost(navController = navController, startDestination = "TreatmentList") {
         composable("PatientList") {
             val patients = remember {
                 //mutableStateOf(Patient("1","Jose","Del Carpio","20","30","jose@gmail.com","2","https://img.europapress.es/fotoweb/fotonoticia_20081004164743_420.jpg"))
@@ -168,7 +168,7 @@ fun Navigation() {
                 }
             })
 
-            TreatmentDetails(treatment = treatments.value)
+            TreatmentDetails(treatment = treatments.value,navController)
         }
 
 

@@ -193,7 +193,7 @@ private fun TreatmentItem(treatment: Treatment, selectTreatment: () -> Unit){
                         BorderStroke(1.dp, Color.Magenta)
                     )){
                     TextField(value ="" , onValueChange = {})
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { }) {
                         Icon(imageVector = Icons.Default.Search, contentDescription = null)
                     }
                 }
@@ -212,7 +212,7 @@ private fun TreatmentItem(treatment: Treatment, selectTreatment: () -> Unit){
 //                Spacer(modifier = Modifier.height(80.dp))
                     Text(text = treatment.title, fontWeight = FontWeight.Bold)
                     Text(text = "Quantity Sessions: ${treatment.sessionsQuantity}")
-                    Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(6.dp)) {
+                    Button(onClick = { selectTreatment() }, modifier = Modifier.padding(6.dp)) {
                         Text(text = "Info")
                     }
                 }
@@ -228,7 +228,7 @@ private fun TreatmentItem(treatment: Treatment, selectTreatment: () -> Unit){
 //                Spacer(modifier = Modifier.height(80.dp))
                     Text(text = treatment.title, fontWeight = FontWeight.Bold)
                     Text(text = "Quantity Sessions: ${treatment.sessionsQuantity}")
-                    Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(6.dp)) {
+                    Button(onClick = { selectTreatment() }, modifier = Modifier.padding(6.dp)) {
                         Text(text = "Info")
                     }
                 }
@@ -246,7 +246,7 @@ private fun TreatmentItem(treatment: Treatment, selectTreatment: () -> Unit){
 //                Spacer(modifier = Modifier.height(80.dp))
                     Text(text = treatment.title, fontWeight = FontWeight.Bold)
                     Text(text = "Quantity Sessions: ${treatment.sessionsQuantity}")
-                    Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(6.dp)) {
+                    Button(onClick = { selectTreatment() }, modifier = Modifier.padding(6.dp)) {
                         Text(text = "Info")
                     }
                 }
@@ -262,7 +262,7 @@ private fun TreatmentItem(treatment: Treatment, selectTreatment: () -> Unit){
 //                Spacer(modifier = Modifier.height(80.dp))
                     Text(text = treatment.title, fontWeight = FontWeight.Bold)
                     Text(text = "Quantity Sessions: ${treatment.sessionsQuantity}")
-                    Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(6.dp)) {
+                    Button(onClick = { selectTreatment() }, modifier = Modifier.padding(6.dp)) {
                         Text(text = "Info")
                     }
                 }
