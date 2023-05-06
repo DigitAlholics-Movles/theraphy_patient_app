@@ -7,11 +7,13 @@ import retrofit2.http.Path
 
 
 interface PatientInterface {
-
     @GET("patients")
     fun getAllPatients(): Call<ApiResponse>
 
     @GET("patients/{index}")
     fun getPatientById(@Path("index")index: String): Call<Patient>
+
+    @GET("patients/{firstName}")
+    fun findByName(@Path("firstName") firstName: String): Call<ApiResponse>
 
 }
