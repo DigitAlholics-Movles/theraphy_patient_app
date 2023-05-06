@@ -38,6 +38,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.simulateHotReload
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,9 +56,9 @@ var searchedText: String = ""
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PatientList(patients: List<Patient>, selectPatient: (String)-> Unit){
-
-
+fun PatientList(lilText: String = "", patients: List<Patient>, selectPatient: (String)-> Unit){
+    var pacientutos: MutableList<Patient> = patients.toMutableList()
+    searchedText = lilText
     Column(modifier = Modifier.padding(17.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = "My Patients", fontSize = 25.sp, fontWeight = FontWeight.Bold,
@@ -78,6 +79,7 @@ fun PatientList(patients: List<Patient>, selectPatient: (String)-> Unit){
             }
             TextField(value = text, onValueChange = { text = it }, Modifier.fillMaxWidth())
             IconButton(onClick = {searchedText = text.toString()
+                //pacientutos = patients.subList(0,1).toMutableList()
             }) {
                 Icon(imageVector = Icons.Default.Search, contentDescription = null)
             }
@@ -86,7 +88,7 @@ fun PatientList(patients: List<Patient>, selectPatient: (String)-> Unit){
 
         }
         LazyColumn(Modifier.height(500.dp)){
-            itemsIndexed(patients){ index, item ->
+            itemsIndexed(pacientutos){ index, item ->
                 PatientItem(item){
                     selectPatient("${index + 1}")
                 }

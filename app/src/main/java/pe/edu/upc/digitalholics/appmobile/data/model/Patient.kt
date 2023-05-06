@@ -5,9 +5,9 @@ data class Patient(
 //    userId: String,
     val firstName: String,
     val lastName: String,
-    val age: String,
-    val birthdayDate: String,
-    val email: String,
     val appointmentQuantity: String,
+    val email: String,
+    val age: String,
     val photoUrl: String,
-)
+    val birthdayDate: String,
+    )
