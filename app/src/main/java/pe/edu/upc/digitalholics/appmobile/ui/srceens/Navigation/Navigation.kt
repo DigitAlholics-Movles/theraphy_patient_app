@@ -20,6 +20,7 @@ import pe.edu.upc.digitalholics.appmobile.ui.srceens.PatientList.PatientList
 import pe.edu.upc.digitalholics.appmobile.ui.srceens.PatientsDetails.PatientDetails
 import pe.edu.upc.digitalholics.appmobile.ui.srceens.TreatmentDetails.TreatmentDetails
 import pe.edu.upc.digitalholics.appmobile.ui.srceens.TreatmentList.Treatments
+import pe.edu.upc.digitalholics.appmobile.ui.srceens.TreatmentList.Treatments2
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

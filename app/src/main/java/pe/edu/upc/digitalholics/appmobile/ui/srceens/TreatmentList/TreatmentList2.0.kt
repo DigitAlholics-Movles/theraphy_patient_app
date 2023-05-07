@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
@@ -37,12 +38,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import pe.edu.upc.digitalholics.appmobile.R
-import pe.edu.upc.digitalholics.appmobile.data.model.Patient
 import pe.edu.upc.digitalholics.appmobile.data.model.Treatment
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Treatments(treatments: List<Treatment>, selectTreatment: (String) -> Unit){
+fun Treatments2(treatments: List<Treatment>, selectTreatment: (String) -> Unit){
 
 //    Text(text = "Find your treatment")
 //    TextField(value = , onValueChange = {}){
@@ -193,7 +193,7 @@ private fun TreatmentItem(treatment: Treatment, selectTreatment: () -> Unit){
                         BorderStroke(1.dp, Color.Magenta)
                     )){
                     TextField(value ="" , onValueChange = {})
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = { /*TODO*/ }) {
                         Icon(imageVector = Icons.Default.Search, contentDescription = null)
                     }
                 }
@@ -212,7 +212,7 @@ private fun TreatmentItem(treatment: Treatment, selectTreatment: () -> Unit){
 //                Spacer(modifier = Modifier.height(80.dp))
                     Text(text = treatment.title, fontWeight = FontWeight.Bold)
                     Text(text = "Quantity Sessions: ${treatment.sessionsQuantity}")
-                    Button(onClick = { selectTreatment() }, modifier = Modifier.padding(6.dp)) {
+                    Button(onClick = { selectTreatment()  }, modifier = Modifier.padding(6.dp)) {
                         Text(text = "Info")
                     }
                 }
@@ -228,7 +228,7 @@ private fun TreatmentItem(treatment: Treatment, selectTreatment: () -> Unit){
 //                Spacer(modifier = Modifier.height(80.dp))
                     Text(text = treatment.title, fontWeight = FontWeight.Bold)
                     Text(text = "Quantity Sessions: ${treatment.sessionsQuantity}")
-                    Button(onClick = { selectTreatment() }, modifier = Modifier.padding(6.dp)) {
+                    Button(onClick = {selectTreatment()  }, modifier = Modifier.padding(6.dp)) {
                         Text(text = "Info")
                     }
                 }
@@ -246,7 +246,7 @@ private fun TreatmentItem(treatment: Treatment, selectTreatment: () -> Unit){
 //                Spacer(modifier = Modifier.height(80.dp))
                     Text(text = treatment.title, fontWeight = FontWeight.Bold)
                     Text(text = "Quantity Sessions: ${treatment.sessionsQuantity}")
-                    Button(onClick = { selectTreatment() }, modifier = Modifier.padding(6.dp)) {
+                    Button(onClick = {selectTreatment()  }, modifier = Modifier.padding(6.dp)) {
                         Text(text = "Info")
                     }
                 }
@@ -262,13 +262,18 @@ private fun TreatmentItem(treatment: Treatment, selectTreatment: () -> Unit){
 //                Spacer(modifier = Modifier.height(80.dp))
                     Text(text = treatment.title, fontWeight = FontWeight.Bold)
                     Text(text = "Quantity Sessions: ${treatment.sessionsQuantity}")
-                    Button(onClick = { selectTreatment() }, modifier = Modifier.padding(6.dp)) {
+                    Button(onClick = { selectTreatment()  }, modifier = Modifier.padding(6.dp)) {
                         Text(text = "Info")
                     }
                 }
             }
             Spacer(modifier = Modifier.height(10.dp))
-
+            Box(contentAlignment = Alignment.BottomCenter){
+                IconButton(
+                    onClick = { /*TODO : Gabriel pones tu parte*/ }) {
+                    Icon(imageVector = Icons.Default.Add, contentDescription = null, modifier = Modifier.border(1.dp, Color.Black, RoundedCornerShape(10.dp)))
+                }
+            }
 
 //        Spacer(modifier = Modifier.height(90.dp))
             Box(modifier = Modifier
