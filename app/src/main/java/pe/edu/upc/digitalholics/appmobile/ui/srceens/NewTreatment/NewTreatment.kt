@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
@@ -48,6 +49,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.NavController
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.ui.StyledPlayerView
@@ -65,7 +67,7 @@ import pe.edu.upc.digitalholics.appmobile.repository.TreatmentRepository
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun newTreatment(treatments: List<Treatment>){
+fun newTreatment(treatments: List<Treatment>,navController: NavController){
 
     val treatmentsInterface = ApiClient.buildTreatmentInterface()
     val viewModelT = NewTreatmentViewModel(treatmentInterface = treatmentsInterface)
@@ -77,7 +79,13 @@ fun newTreatment(treatments: List<Treatment>){
         topBar = {
             TopAppBar(
                 modifier = Modifier.padding(40.dp, 0.dp,0.dp, 0.dp),
-                title = { Text(text = "New treatment") }
+                title = { Text(text = "New treatment")
+                    /*
+                    navigationIcon = {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(Icons.Filled.ArrowBack, "Back")
+                        }
+                    }*/}
             )
         }
     ) {
