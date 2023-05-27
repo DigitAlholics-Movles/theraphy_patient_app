@@ -58,7 +58,7 @@ import pe.edu.upc.digitalholics.appmobile.repository.TreatmentRepository
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun newTreatment(){
+fun newTreatment(treatments: List<Treatment>){
 
     val treatmentsInterface = ApiClient.buildTreatmentInterface()
     val viewModelT = NewTreatmentViewModel(treatmentInterface = treatmentsInterface)
@@ -88,6 +88,7 @@ fun newTreatment(){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
+            var title = remember { mutableStateOf(TextFieldValue()) }
             var description = remember { mutableStateOf(TextFieldValue()) }
             var sessionsQuantity = remember { mutableStateOf(TextFieldValue()) }
 
@@ -96,7 +97,14 @@ fun newTreatment(){
 
            // viewModelT.pushTreatment("1", "new", description.value.text, "https://www.redaccionmedica.com/images/enfermedades/dolor-rodilla.jpg", sessionsQuantity.value.text, physiotherapist)
 
-            Spacer(modifier = Modifier.height(200.dp))
+            Spacer(modifier = Modifier.height(240.dp))
+            OutlinedTextField(
+                value = title.value,
+                onValueChange = { title.value = it },
+                label = { Text(text = "Title") },
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
             OutlinedTextField(
                 value = description.value,
                 onValueChange = { description.value = it },
@@ -127,8 +135,9 @@ fun newTreatment(){
                     modifier = Modifier.padding(20.dp, 0.dp, 0.dp, 0.dp),
                     onClick = {
 
+                        val newTreatmentId= treatments.size+1
 
-                        val treatment = Treatment("2", "new", description.value.text, "https://www.redaccionmedica.com/images/enfermedades/dolor-rodilla.jpg", 2, physiotherapist)
+                        val treatment = Treatment(newTreatmentId, title.value.text, description.value.text, "https://digitalholics-3-0.github.io/LandingPage-Theraphy/Logo%20de%20Theraphy%202.png", sessionsQuantity.value.text.toInt(), physiotherapist)
 
                         coroutineScope.launch {
                             val response = treatmentsInterface.postNewTreatment(treatment)

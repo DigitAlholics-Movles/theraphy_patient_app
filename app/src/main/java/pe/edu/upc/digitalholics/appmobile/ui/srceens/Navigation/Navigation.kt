@@ -10,8 +10,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import pe.edu.upc.digitalholics.appmobile.data.model.Patient
+import pe.edu.upc.digitalholics.appmobile.data.model.Treatment
 import pe.edu.upc.digitalholics.appmobile.data.remote.ApiClient
 import pe.edu.upc.digitalholics.appmobile.data.remote.ApiResponse
+import pe.edu.upc.digitalholics.appmobile.data.remote.TreatmentResponse
+import pe.edu.upc.digitalholics.appmobile.ui.srceens.NewTreatment.newTreatment
 import pe.edu.upc.digitalholics.appmobile.ui.srceens.PatientList.PatientList
 //import pe.edu.upc.digitalholics.appmobile.ui.srceens.PatientsDetails.Patient
 import pe.edu.upc.digitalholics.appmobile.ui.srceens.PatientsDetails.PatientDetails
@@ -23,7 +26,7 @@ import retrofit2.Response
 fun Navigation() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "PatientList") {
+    NavHost(navController = navController, startDestination = "newTreatment") {
         composable("PatientList") {
             val patients = remember {
                 //mutableStateOf(Patient("1","Jose","Del Carpio","20","30","jose@gmail.com","2","https://img.europapress.es/fotoweb/fotonoticia_20081004164743_420.jpg"))
@@ -83,6 +86,34 @@ fun Navigation() {
             })
 
             PatientDetails(patient = patients.value)
+        }
+
+
+        composable("newTreatment"){
+            val treatments = remember {
+                mutableStateOf(emptyList<Treatment>())
+            }
+            val treatmentInterface = ApiClient.buildTreatmentInterface()
+            val getAllTreatments = treatmentInterface.getAllTreatments()
+
+            getAllTreatments.enqueue(object : Callback<TreatmentResponse> {
+                override fun onResponse(
+                    call: Call<TreatmentResponse>,
+                    response: Response<TreatmentResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        treatments.value = response.body()?.treatments!!
+
+                    }
+                }
+
+                override fun onFailure(call: Call<TreatmentResponse>, t: Throwable) {
+
+                }
+            })
+            newTreatment(
+                treatments = treatments.value,
+            )
         }
 
     }
