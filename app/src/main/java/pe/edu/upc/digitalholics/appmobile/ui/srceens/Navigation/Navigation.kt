@@ -112,7 +112,7 @@ fun Navigation() {
                 }
             })
             newTreatment(
-                treatments = treatments.value,
+                treatments = treatments.value,navController
             )
         }
 

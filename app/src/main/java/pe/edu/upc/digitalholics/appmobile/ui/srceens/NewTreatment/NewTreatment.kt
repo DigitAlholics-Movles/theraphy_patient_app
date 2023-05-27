@@ -78,14 +78,13 @@ fun newTreatment(treatments: List<Treatment>,navController: NavController){
     Scaffold(
         topBar = {
             TopAppBar(
-                modifier = Modifier.padding(40.dp, 0.dp,0.dp, 0.dp),
-                title = { Text(text = "New treatment")
-                    /*
-                    navigationIcon = {
-                        IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(Icons.Filled.ArrowBack, "Back")
-                        }
-                    }*/}
+                modifier = Modifier.padding(0.dp, 0.dp,0.dp, 0.dp),
+                title = { Text(text = "New treatment")},
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(Icons.Filled.ArrowBack, "Back")
+                    }
+                }
             )
         }
     ) {
