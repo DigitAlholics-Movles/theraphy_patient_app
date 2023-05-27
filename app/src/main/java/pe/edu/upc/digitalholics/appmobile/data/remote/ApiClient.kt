@@ -4,7 +4,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient {
-    private const val API_BASE_URL = "https://backendproyectotheraphy-production.up.railway.app/api/v1/"
+    private const val API_BASE_URL = "https://backendproyectotheraphy-production-41c2.up.railway.app/api/v1/"
     private var patientInterface: PatientInterface? = null
     private var treatmentInterface: TreatmentInterface? = null
 

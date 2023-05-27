@@ -1,11 +1,16 @@
 package pe.edu.upc.digitalholics.appmobile.ui.srceens.TreatmentDetails
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+
+
 import androidx.compose.foundation.layout.Row
+
+
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,11 +43,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import pe.edu.upc.digitalholics.appmobile.data.model.Treatment
-
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 
 @Composable
 fun Treatments(treatments: List<Treatment>){
@@ -52,38 +60,38 @@ fun Treatments(treatments: List<Treatment>){
         }
     }
 }
-
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TreatmentDetails(treatment: Treatment, navController: NavController) {
-
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    TreatmentTitle(treatment= treatment)
+                    TreatmentTitle(treatment = treatment)
                 },
                 navigationIcon = {
-                    IconButton(onClick = {navController.popBackStack() }) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Filled.ArrowBack, "Back")
                     }
                 }
             )
         },
         content = {
-            Column {
-                TreatmentDetailImage(treatment= treatment)
-                TreatmentDescription(treatment= treatment)
+            Column(modifier = Modifier.fillMaxSize()) {
+                LazyColumn(modifier = Modifier.weight(1f)) {
+                    item {
+                        TreatmentDetailImage(treatment = treatment)
+                    }
+                    item {
+                        TreatmentDescription(treatment = treatment)
+                    }
+                }
+                Footer()
             }
-
         }
     )
-
-
-
 }
-
 
 @Composable
 fun TreatmentTitle(
@@ -91,11 +99,10 @@ fun TreatmentTitle(
     modifier: Modifier = Modifier
 ) {
     Spacer(modifier = modifier.width(8.dp))
-    Row {
-        Column(modifier = modifier.weight(7f)) {
+    Row(modifier = modifier) {
+        Column(modifier = Modifier.weight(7f)) {
             Text(text = treatment.title, fontWeight = FontWeight.Bold)
         }
-
     }
 }
 
@@ -103,14 +110,14 @@ fun TreatmentTitle(
 fun TreatmentDetailImage(
     treatment: Treatment,
     modifier: Modifier = Modifier
-){
-
+) {
     Row {
-
-        Column(modifier = Modifier
-            .padding(100.dp, 80.dp, 0.dp, 0.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier
+                .padding(100.dp, 80.dp, 0.dp, 0.dp)
+                .weight(1f)
+                .align(Alignment.CenterVertically)
+        ) {
             AsyncImage(
                 model = treatment.photoUrl,
                 contentDescription = null,
@@ -120,60 +127,54 @@ fun TreatmentDetailImage(
                 contentScale = ContentScale.Crop
             )
         }
-
     }
 }
-
 
 @Composable
 fun TreatmentDescription(
     treatment: Treatment,
     modifier: Modifier = Modifier
 ) {
-
     Spacer(modifier = modifier.height(20.dp))
-    Row {
+    Row(modifier = modifier) {
         Spacer(modifier = modifier.width(28.dp))
-        Column(modifier = modifier.weight(7f)) {
-
+        Column(modifier = Modifier.weight(1f)) {
             Text(text = "Description ", fontWeight = FontWeight.Bold)
         }
     }
 
     Spacer(modifier = modifier.height(15.dp))
-    Row {
+    Row(modifier = modifier) {
         Spacer(modifier = modifier.width(28.dp))
-        Column(modifier = modifier.weight(7f)) {
+        Column(modifier = Modifier.weight(1f)) {
             Text(text = treatment.description, fontWeight = FontWeight.Light)
         }
         Spacer(modifier = modifier.width(28.dp))
-
     }
+
     Spacer(modifier = modifier.height(15.dp))
-    Row( modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center){
-
-            Button(onClick = { /* acción al hacer clic en el botón */ }) {
-                Text(text = "Enroll")
-            }
-
-
-
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Button(onClick = { /* acción al hacer clic en el botón */ }) {
+            Text(text = "Enroll")
+        }
     }
-    TreatmentNavBar(treatment)
-
 }
-
 @Composable
-fun TreatmentNavBar(
-    treatment: Treatment,
-    modifier: Modifier = Modifier
-) {
-    Spacer(modifier = modifier.height(80.dp))
-
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .border(3.dp, Color.Magenta),contentAlignment = Alignment.Center
+fun Footer(){
+    Spacer(modifier = Modifier.padding(4.dp))
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .border(
+                2.dp,
+                color = MaterialTheme.colorScheme.tertiaryContainer,
+                shape = MaterialTheme.shapes.medium
+            ),
+        color = Color.Transparent
     ) {
         Row(modifier = Modifier.padding(10.dp)) {
             IconButton(onClick = { /*TODO*/ }) {
@@ -188,7 +189,7 @@ fun TreatmentNavBar(
                 Icon(imageVector = Icons.Default.Info, contentDescription = null)
             }
             Spacer(modifier = Modifier.width(30.dp))
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick =  { /*TODO*/ }) {
                 Icon(imageVector = Icons.Default.List, contentDescription = null)
             }
             Spacer(modifier = Modifier.width(30.dp))
@@ -197,7 +198,7 @@ fun TreatmentNavBar(
             }
         }
     }
-}
 
+}
 
 
