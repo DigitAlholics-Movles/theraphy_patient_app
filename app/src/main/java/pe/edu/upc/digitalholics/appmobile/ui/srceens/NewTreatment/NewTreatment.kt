@@ -32,17 +32,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.ui.StyledPlayerView
+import kotlinx.coroutines.launch
 import pe.edu.upc.digitalholics.appmobile.data.model.Physiotherapist
+import pe.edu.upc.digitalholics.appmobile.data.model.Treatment
+import pe.edu.upc.digitalholics.appmobile.data.remote.ApiClient
+
+
+
+
+import pe.edu.upc.digitalholics.appmobile.data.remote.TreatmentInterface
 import pe.edu.upc.digitalholics.appmobile.repository.TreatmentRepository
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -50,8 +60,11 @@ import pe.edu.upc.digitalholics.appmobile.repository.TreatmentRepository
 @Composable
 fun newTreatment(){
 
-    var viewModelT = NewTreatmentViewModel(treatmentRepository = TreatmentRepository())
-
+    val treatmentsInterface = ApiClient.buildTreatmentInterface()
+    val viewModelT = NewTreatmentViewModel(treatmentInterface = treatmentsInterface)
+    val coroutineScope = rememberCoroutineScope()
+    val errorMessage = remember { mutableStateOf("") }
+    val createMessage = remember { mutableStateOf("") }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -78,10 +91,10 @@ fun newTreatment(){
             var description = remember { mutableStateOf(TextFieldValue()) }
             var sessionsQuantity = remember { mutableStateOf(TextFieldValue()) }
 
-            val physiotherapist = Physiotherapist("1", "Roberto","Loza","Perez","45","4","Lima",
+            val physiotherapist = Physiotherapist(1, "Roberto","Loza","Perez","45","4","Lima",
                 "","04/05/1994","20","Neck","roberto@email.com","2")
 
-            viewModelT.pushTreatment("1", "new", description.value.text, "https://www.redaccionmedica.com/images/enfermedades/dolor-rodilla.jpg", sessionsQuantity.value.text, physiotherapist)
+           // viewModelT.pushTreatment("1", "new", description.value.text, "https://www.redaccionmedica.com/images/enfermedades/dolor-rodilla.jpg", sessionsQuantity.value.text, physiotherapist)
 
             Spacer(modifier = Modifier.height(200.dp))
             OutlinedTextField(
@@ -112,13 +125,41 @@ fun newTreatment(){
 
                 Button(
                     modifier = Modifier.padding(20.dp, 0.dp, 0.dp, 0.dp),
-                    onClick = { viewModelT.pushTreatment("1", "new", description.value.text, "https://www.redaccionmedica.com/images/enfermedades/dolor-rodilla.jpg", sessionsQuantity.value.text, physiotherapist)
-                    },
+                    onClick = {
+
+
+                        val treatment = Treatment("2", "new", description.value.text, "https://www.redaccionmedica.com/images/enfermedades/dolor-rodilla.jpg", 2, physiotherapist)
+
+                        coroutineScope.launch {
+                            val response = treatmentsInterface.postNewTreatment(treatment)
+                            if (response.isSuccessful) {
+                                  createMessage.value="Se guardo el tratamiento"
+                            } else {
+                                errorMessage.value="No se pudo guardar el tratamiento"
+                            }
+                        }
+                              },
                     shape = RoundedCornerShape(15.dp)
                 ) {
                     Text("Save")
                 }
             }
+
+            if (createMessage.value.isNotEmpty()) {
+                Text(
+                    text = createMessage.value,
+                    fontSize = 14.sp,
+                    color = Color(0xFF40A42B)
+                )
+            }
+            if (errorMessage.value.isNotEmpty()) {
+                Text(
+                    text = errorMessage.value,
+                    fontSize = 14.sp,
+                    color = Color(0xFFF75B60)
+                )
+            }
+
             Spacer(modifier = Modifier.height(50.dp))
             Box(modifier = Modifier
                 .border(3.dp, Color.Magenta),contentAlignment = Alignment.Center
@@ -177,3 +218,4 @@ fun playVideo(){
         }
     }
 }
+

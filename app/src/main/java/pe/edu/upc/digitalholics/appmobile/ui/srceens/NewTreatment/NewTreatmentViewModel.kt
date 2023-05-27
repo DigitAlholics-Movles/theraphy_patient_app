@@ -6,16 +6,19 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import pe.edu.upc.digitalholics.appmobile.data.model.Physiotherapist
 import pe.edu.upc.digitalholics.appmobile.data.model.Treatment
+import pe.edu.upc.digitalholics.appmobile.data.remote.TreatmentInterface
 import pe.edu.upc.digitalholics.appmobile.repository.TreatmentRepository
 import retrofit2.Response
 
-class NewTreatmentViewModel(private val treatmentRepository: TreatmentRepository): ViewModel() {
-    val myPushTreatment: MutableLiveData<Response<Treatment>> = MutableLiveData()
-
-    fun pushTreatment(id: String, title: String, description: String, photoUrl: String, sessionsQuantity: String, physiotherapist: Physiotherapist){
+class NewTreatmentViewModel(private val treatmentInterface: TreatmentInterface): ViewModel() {
+    fun pushTreatment(treatment: Treatment) {
         viewModelScope.launch {
-            val  response = treatmentRepository.pushTreatments(id, title, description, photoUrl, sessionsQuantity, physiotherapist)
-            myPushTreatment.value = response
+            try {
+                treatmentInterface.postNewTreatment(treatment)
+                // Manejar la respuesta o realizar otras operaciones después de guardar el tratamiento
+            } catch (e: Exception) {
+                // Manejar el error en caso de que ocurra
+            }
         }
     }
 }

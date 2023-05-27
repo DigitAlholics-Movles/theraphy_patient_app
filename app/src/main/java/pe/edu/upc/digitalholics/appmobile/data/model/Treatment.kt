@@ -5,7 +5,7 @@ data class Treatment(
     val title: String,
     val description: String,
     val photoUrl: String,
-    val sessionsQuantity: String,
+    val sessionsQuantity: Int,
     val physiotherapist: Physiotherapist,
 
 )

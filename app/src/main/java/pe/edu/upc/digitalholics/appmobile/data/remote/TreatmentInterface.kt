@@ -17,17 +17,8 @@ interface TreatmentInterface {
 
     @GET("treatments/{index}")
     fun getTreatmentById(@Path("index")index: String): Call<Treatment>
-
-    @FormUrlEncoded
     @POST("treatments")
-    fun postNewTreatment(
-        @Field ("id") id: String ,
-        @Field ("title") title: String,
-        @Field ("description") description: String,
-        @Field ("photoUrl") photoUrl: String,
-        @Field ("sessionsQuantity") sessionsQuantity: String,
-        @Field ("physiotherapist") physiotherapist: Physiotherapist,
-    ): Response<Treatment>
+    suspend fun postNewTreatment(@Body treatment: Treatment): Response<Treatment>
 
 
 }
