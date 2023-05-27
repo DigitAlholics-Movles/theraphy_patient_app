@@ -81,7 +81,7 @@ fun newTreatment(treatments: List<Treatment>){
             )
         }
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxWidth()) {
             Box(
                 modifier = Modifier
                     .weight(1f)
@@ -93,7 +93,7 @@ fun newTreatment(treatments: List<Treatment>){
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(60.dp)
+                    .padding(start=60.dp, top = 60.dp, end = 60.dp)
                     .verticalScroll(rememberScrollState()) // Habilitar desplazamiento vertical
             ) {
                 var title by remember { mutableStateOf(TextFieldValue()) }
