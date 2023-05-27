@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Face
@@ -24,20 +26,25 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
+
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -65,6 +72,7 @@ fun newTreatment(treatments: List<Treatment>){
     val coroutineScope = rememberCoroutineScope()
     val errorMessage = remember { mutableStateOf("") }
     val createMessage = remember { mutableStateOf("") }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -72,144 +80,115 @@ fun newTreatment(treatments: List<Treatment>){
                 title = { Text(text = "New treatment") }
             )
         }
-    )
-    {
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .padding(60.dp, 0.dp, 60.dp, 400.dp)){
-            playVideo()
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(10.dp, 150.dp, 0.dp, 0.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            var title = remember { mutableStateOf(TextFieldValue()) }
-            var description = remember { mutableStateOf(TextFieldValue()) }
-            var sessionsQuantity = remember { mutableStateOf(TextFieldValue()) }
-
-            val physiotherapist = Physiotherapist(1, "Roberto","Loza","Perez","45","4","Lima",
-                "","04/05/1994","20","Neck","roberto@email.com","2")
-
-           // viewModelT.pushTreatment("1", "new", description.value.text, "https://www.redaccionmedica.com/images/enfermedades/dolor-rodilla.jpg", sessionsQuantity.value.text, physiotherapist)
-
-            Spacer(modifier = Modifier.height(240.dp))
-            OutlinedTextField(
-                value = title.value,
-                onValueChange = { title.value = it },
-                label = { Text(text = "Title") },
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-            OutlinedTextField(
-                value = description.value,
-                onValueChange = { description.value = it },
-                label = { Text(text = "Description") },
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-            OutlinedTextField(
-                value = sessionsQuantity.value,
-                onValueChange = { sessionsQuantity.value = it },
-                label = { Text(text = "Sessions Quantity") },
-            )
-
-            Spacer(modifier = Modifier.height(40.dp))
-            Row(
-                horizontalArrangement = Arrangement.Center,
-
-                ) {
-                Button(
-                    modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 0.dp),
-                    onClick = { /*TODO*/ },
-                    shape = RoundedCornerShape(15.dp)
-                ) {
-                    Text("Upload")
-                }
-
-                Button(
-                    modifier = Modifier.padding(20.dp, 0.dp, 0.dp, 0.dp),
-                    onClick = {
-
-                        val newTreatmentId= treatments.size+1
-
-                        val treatment = Treatment(newTreatmentId, title.value.text, description.value.text, "https://digitalholics-3-0.github.io/LandingPage-Theraphy/Logo%20de%20Theraphy%202.png", sessionsQuantity.value.text.toInt(), physiotherapist)
-
-                        coroutineScope.launch {
-                            val response = treatmentsInterface.postNewTreatment(treatment)
-                            if (response.isSuccessful) {
-                                  createMessage.value="Se guardo el tratamiento"
-                            } else {
-                                errorMessage.value="No se pudo guardar el tratamiento"
-                            }
-                        }
-                              },
-                    shape = RoundedCornerShape(15.dp)
-                ) {
-                    Text("Save")
-                }
-            }
-
-            if (createMessage.value.isNotEmpty()) {
-                Text(
-                    text = createMessage.value,
-                    fontSize = 14.sp,
-                    color = Color(0xFF40A42B)
-                )
-            }
-            if (errorMessage.value.isNotEmpty()) {
-                Text(
-                    text = errorMessage.value,
-                    fontSize = 14.sp,
-                    color = Color(0xFFF75B60)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(50.dp))
-            Box(modifier = Modifier
-                .border(3.dp, Color.Magenta),contentAlignment = Alignment.Center
+    ) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(60.dp, 0.dp, 60.dp, 0.dp)
             ) {
-                Row(modifier = Modifier.padding(10.dp)) {
-                    IconButton(onClick = { }) {
-                        Icon(imageVector = Icons.Default.Home, contentDescription = null)
-                    }
-                    Spacer(modifier = Modifier.width(25.dp))
-                    IconButton(onClick = {  }) {
-                        Icon(imageVector = Icons.Default.AccountBox, contentDescription = null)
-                    }
-                    Spacer(modifier = Modifier.width(25.dp))
-                    IconButton(onClick = {  }) {
-                        Icon(imageVector = Icons.Default.Info, contentDescription = null)
-                    }
-                    Spacer(modifier = Modifier.width(25.dp))
-                    IconButton(onClick = {  }) {
-                        Icon(imageVector = Icons.Default.List, contentDescription = null)
-                    }
-                    Spacer(modifier = Modifier.width(6.dp))
-                    IconButton(onClick = { }) {
-                        Icon(imageVector = Icons.Default.Face, contentDescription = null)
-                    }
-                }
+                playVideo()
             }
 
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(60.dp)
+                    .verticalScroll(rememberScrollState()) // Habilitar desplazamiento vertical
+            ) {
+                var title by remember { mutableStateOf(TextFieldValue()) }
+                var description by remember { mutableStateOf(TextFieldValue()) }
+                var sessionsQuantity by remember { mutableStateOf(TextFieldValue()) }
+                val physiotherapist = Physiotherapist(1, "Roberto","Loza","Perez","45","4","Lima",
+                    "","04/05/1994","20","Neck","roberto@email.com","2")
+
+                OutlinedTextField(
+                    value = title,
+                    onValueChange = { title = it },
+                    label = { Text(text = "Title") },
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+                OutlinedTextField(
+                    value = description,
+                    onValueChange = { description = it },
+                    label = { Text(text = "Description") },
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+                OutlinedTextField(
+                    value = sessionsQuantity,
+                    onValueChange = { sessionsQuantity = it },
+                    label = { Text(text = "Sessions Quantity") },
+                )
+
+                Spacer(modifier = Modifier.height(40.dp))
+
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Button(
+                        modifier = Modifier.padding(0.dp, 0.dp, 20.dp, 0.dp),
+                        onClick = { /*TODO*/ },
+                        shape = RoundedCornerShape(15.dp)
+                    ) {
+                        Text("Upload")
+                    }
+
+                    Button(
+                        modifier = Modifier.padding(20.dp, 0.dp, 0.dp, 0.dp),
+                        onClick = {
+                            val newTreatmentId = treatments.size + 1
+
+                            val treatment = Treatment(
+                                newTreatmentId,
+                                title.text,
+                                description.text,
+                                "https://digitalholics-3-0.github.io/LandingPage-Theraphy/Logo%20de%20Theraphy%202.png",
+                                sessionsQuantity.text.toInt(),
+                                physiotherapist
+                            )
+
+                            coroutineScope.launch {
+                                val response = treatmentsInterface.postNewTreatment(treatment)
+                                if (response.isSuccessful) {
+                                    createMessage.value = "Se guardo el tratamiento"
+                                } else {
+                                    errorMessage.value = "No se pudo guardar el tratamiento"
+                                }
+                            }
+                        },
+                        shape = RoundedCornerShape(15.dp)
+                    ) {
+                        Text("Save")
+                    }
+                }
+
+                if (createMessage.value.isNotEmpty()) {
+                    Text(
+                        text = createMessage.value,
+                        fontSize = 14.sp,
+                        color = Color(0xFF40A42B)
+                    )
+                }
+                if (errorMessage.value.isNotEmpty()) {
+                    Text(
+                        text = errorMessage.value,
+                        fontSize = 14.sp,
+                        color = Color(0xFFF75B60)
+                    )
+                }
+
+            }
+            Footer()
+
         }
-
     }
-
-
-
 }
 
-
-
-
 @Composable
-fun playVideo(){
-
+fun playVideo() {
     val context = LocalContext.current
     val videoUrl = "https://www.youtube.com/watch?v=qYhvEJsWH4M"
     val exoPlayer = ExoPlayer.Builder(context).build()
@@ -219,12 +198,49 @@ fun playVideo(){
     val playerView = StyledPlayerView(context)
     playerView.player = exoPlayer
 
-    DisposableEffect(AndroidView(factory = { playerView })){
+    DisposableEffect(AndroidView(factory = { playerView })) {
         exoPlayer.prepare()
-        exoPlayer.playWhenReady= true
+        exoPlayer.playWhenReady = true
         onDispose {
             exoPlayer.release()
         }
     }
 }
 
+@Composable
+fun Footer() {
+    Spacer(modifier = Modifier.padding(4.dp))
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .border(
+                2.dp,
+                color = MaterialTheme.colorScheme.tertiaryContainer,
+                shape = MaterialTheme.shapes.medium
+            ),
+        color = Color.Transparent
+    ) {
+        Row(modifier = Modifier.padding(10.dp)) {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.Home, contentDescription = null)
+            }
+            Spacer(modifier = Modifier.width(30.dp))
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.AccountBox, contentDescription = null)
+            }
+            Spacer(modifier = Modifier.width(30.dp))
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.Info, contentDescription = null)
+            }
+            Spacer(modifier = Modifier.width(30.dp))
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.List, contentDescription = null)
+            }
+            Spacer(modifier = Modifier.width(30.dp))
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.Face, contentDescription = null)
+            }
+        }
+    }
+}
