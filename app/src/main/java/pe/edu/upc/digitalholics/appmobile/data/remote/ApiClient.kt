@@ -9,7 +9,7 @@ object ApiClient {
     private var treatmentInterface: TreatmentInterface? = null
 
     //esto llama al API
-    fun build(): PatientInterface{
+    fun buildPatientInterface(): PatientInterface{
         val retrofit = Retrofit.Builder()
             .baseUrl(API_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())

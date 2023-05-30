@@ -36,13 +36,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import pe.edu.upc.digitalholics.appmobile.R
 import pe.edu.upc.digitalholics.appmobile.data.model.Patient
 import pe.edu.upc.digitalholics.appmobile.data.model.Treatment
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Treatments(treatments: List<Treatment>, selectTreatment: (String) -> Unit){
+fun Treatments(treatments: List<Treatment>, selectTreatment: (String) -> Unit,navController: NavController){
 
 //    Text(text = "Find your treatment")
 //    TextField(value = , onValueChange = {}){
@@ -51,9 +52,9 @@ fun Treatments(treatments: List<Treatment>, selectTreatment: (String) -> Unit){
 
     LazyColumn(){
         itemsIndexed(treatments){index, item ->
-            TreatmentItem(item){
+            TreatmentItem(item,{
                 selectTreatment("${index+1}")
-            }
+            },navController)
         }
     }
 
@@ -178,7 +179,7 @@ fun Treatments(treatments: List<Treatment>, selectTreatment: (String) -> Unit){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TreatmentItem(treatment: Treatment, selectTreatment: () -> Unit){
+private fun TreatmentItem(treatment: Treatment, selectTreatment: () -> Unit,navController: NavController){
     Card(
         onClick = {
 
@@ -292,7 +293,8 @@ private fun TreatmentItem(treatment: Treatment, selectTreatment: () -> Unit){
                         Icon(imageVector = Icons.Default.List, contentDescription = null)
                     }
                     Spacer(modifier = Modifier.width(30.dp))
-                    IconButton(onClick = { /*TODO*/ }) {
+                    val a= 1
+                    IconButton(onClick = {  navController.navigate("patient/$a")}) {
                         Icon(imageVector = Icons.Default.Face, contentDescription = null)
                     }
                 }
