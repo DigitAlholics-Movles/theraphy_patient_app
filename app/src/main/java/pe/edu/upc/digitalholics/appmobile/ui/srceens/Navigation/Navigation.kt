@@ -132,6 +132,13 @@ fun Navigation() {
                     navController.navigate("treatment/$index")
                 }
             )
+
+            Treatments(
+                treatments = treatments.value,
+                selectTreatment = { index ->
+                    navController.navigate("treatment/$index")
+                }
+            )
         }
 
         //treatmentAdd

@@ -270,32 +270,43 @@ private fun TreatmentItem(treatment: Treatment, selectTreatment: () -> Unit){
             Spacer(modifier = Modifier.height(10.dp))
 
 
+
+
 //        Spacer(modifier = Modifier.height(90.dp))
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .border(3.dp, Color.Magenta),contentAlignment = Alignment.Center
-            ) {
-                Row(modifier = Modifier.padding(10.dp)) {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(imageVector = Icons.Default.Home, contentDescription = null)
-                    }
-                    Spacer(modifier = Modifier.width(30.dp))
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(imageVector = Icons.Default.AccountBox, contentDescription = null)
-                    }
-                    Spacer(modifier = Modifier.width(30.dp))
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(imageVector = Icons.Default.Info, contentDescription = null)
-                    }
-                    Spacer(modifier = Modifier.width(30.dp))
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(imageVector = Icons.Default.List, contentDescription = null)
-                    }
-                    Spacer(modifier = Modifier.width(30.dp))
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(imageVector = Icons.Default.Face, contentDescription = null)
-                    }
-                }
+
+
+            Footer()
+
+
+        }
+    }
+}
+
+@Composable
+fun Footer(){
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .border(3.dp, Color.Magenta),contentAlignment = Alignment.Center
+    ) {
+        Row(modifier = Modifier.padding(10.dp)) {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.Home, contentDescription = null)
+            }
+            Spacer(modifier = Modifier.width(30.dp))
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.AccountBox, contentDescription = null)
+            }
+            Spacer(modifier = Modifier.width(30.dp))
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.Info, contentDescription = null)
+            }
+            Spacer(modifier = Modifier.width(30.dp))
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.List, contentDescription = null)
+            }
+            Spacer(modifier = Modifier.width(30.dp))
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.Face, contentDescription = null)
             }
         }
     }

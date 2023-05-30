@@ -9,8 +9,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import pe.edu.upc.digitalholics.appmobile.ui.srceens.HomePatients.HomePatient
 import pe.edu.upc.digitalholics.appmobile.ui.srceens.Navigation.Navigation
+import pe.edu.upc.digitalholics.appmobile.ui.srceens.PhysiotherapistList.PhysiotherapistList
 import pe.edu.upc.digitalholics.appmobile.ui.theme.AppmobileTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +24,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Navigation()
+//                    Navigation()
+//                    Treatments()
+                    HomePatient()
                 }
             }
         }
@@ -38,10 +41,10 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AppmobileTheme {
-        Greeting("Android")
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun GreetingPreview() {
+//    AppmobileTheme {
+//        Greeting("Android")
+//    }
+//}
