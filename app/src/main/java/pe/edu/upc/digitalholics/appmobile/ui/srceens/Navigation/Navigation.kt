@@ -14,6 +14,7 @@ import pe.edu.upc.digitalholics.appmobile.data.model.Treatment
 import pe.edu.upc.digitalholics.appmobile.data.remote.ApiClient
 import pe.edu.upc.digitalholics.appmobile.data.remote.ApiResponse
 import pe.edu.upc.digitalholics.appmobile.data.remote.TreatmentResponse
+import pe.edu.upc.digitalholics.appmobile.ui.srceens.HomePatients.HomePatient
 import pe.edu.upc.digitalholics.appmobile.ui.srceens.PatientList.PatientList
 //import pe.edu.upc.digitalholics.appmobile.ui.srceens.PatientsDetails.Patient
 import pe.edu.upc.digitalholics.appmobile.ui.srceens.PatientsDetails.PatientDetails
@@ -26,7 +27,7 @@ import retrofit2.Response
 fun Navigation() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "TreatmentList") {
+    NavHost(navController = navController, startDestination = "home") {
         composable("PatientList") {
             val patients = remember {
                 //mutableStateOf(Patient("1","Jose","Del Carpio","20","30","jose@gmail.com","2","https://img.europapress.es/fotoweb/fotonoticia_20081004164743_420.jpg"))
@@ -143,6 +144,39 @@ fun Navigation() {
 
         //treatmentAdd
 
+
+        composable("home"){
+            val patient = remember {
+                mutableStateOf(
+                    Patient(
+                        "1",
+                        "Jose",
+                        "Del Carpio",
+                        "20",
+                        "30",
+                        "jose@gmail.com",
+                        "2",
+                        "https://img.europapress.es/fotoweb/fotonoticia_20081004164743_420.jpg"
+                    )
+                )
+            }
+            val patientInterface = ApiClient.build()
+            val getPatientById = patientInterface.getPatientById("1")
+
+            getPatientById.enqueue(object : Callback<Patient> {
+                override fun onResponse(call: Call<Patient>, response: Response<Patient>) {
+                    if (response.isSuccessful) {
+                        patient.value = response.body()!!
+                    }
+                }
+
+                override fun onFailure(call: Call<Patient>, t: Throwable) {
+                }
+            })
+            HomePatient(patient.value, navController = navController)
+
+
+        }
 
     }
 }

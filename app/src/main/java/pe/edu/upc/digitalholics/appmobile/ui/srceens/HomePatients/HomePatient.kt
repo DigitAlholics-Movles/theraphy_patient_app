@@ -31,27 +31,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import pe.edu.upc.digitalholics.appmobile.R
+import pe.edu.upc.digitalholics.appmobile.data.model.Patient
 
 @Composable
-fun HomePatient(){
+fun HomePatient(patient: Patient, navController: NavController){
     Column() {
-        FirstHome()
+        FirstHome(patient)
         LongCard()
-        MyTreatments()
-        MyPhysiotherapists()
+        MyTreatments(patient)
+        MyPhysiotherapists(patient)
         Footer()
     }
 }
 
 @Composable
-fun FirstHome(){
-    Text("Hello, Luis", modifier = Modifier.padding(12.dp))
-    Text("Today appointment", modifier = Modifier.padding(start = 12.dp))
+fun FirstHome(patient: Patient){
+    Text("Hello,${patient.firstName}", modifier = Modifier.padding(12.dp))
+    Text("Today appointments", modifier = Modifier.padding(start = 12.dp))
 }
 
 @Composable
-fun MyPhysiotherapists() {
+fun MyPhysiotherapists(patient: Patient) {
     Text("My physiotherapists", modifier = Modifier.padding(start = 12.dp))
     Surface(
         modifier = Modifier
@@ -86,7 +88,7 @@ fun MyPhysiotherapists() {
 
 
 @Composable
-fun MyTreatments(){
+fun MyTreatments(patient: Patient){
     Text("My treatments", modifier = Modifier.padding(start = 12.dp))
     Surface(
         modifier = Modifier
