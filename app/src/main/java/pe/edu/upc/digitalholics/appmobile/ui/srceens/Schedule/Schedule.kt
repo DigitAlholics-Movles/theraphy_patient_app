@@ -69,16 +69,18 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pe.edu.upc.digitalholics.appmobile.R
+import pe.edu.upc.digitalholics.appmobile.data.model.Patient
+import pe.edu.upc.digitalholics.appmobile.data.model.Physiotherapist
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.TimeZone
 
 @Composable
-fun Schedule() {
+fun Schedule(physiotherapist: Physiotherapist) {
 
-    val videos = 45
-    val appointments = 45
+    //val videos = 45
+    //val appointments = 45
 
     Column(
         modifier = Modifier
@@ -124,7 +126,7 @@ fun Schedule() {
                 .border(border = BorderStroke(7.dp, Color(0, 40, 122)), shape = CircleShape)
 
         )
-        Text("Dr. Cristhian Gomez", fontSize = 25.sp, fontWeight = FontWeight.Bold,
+        Text("${"Dr. " + physiotherapist.firstName+ " "+ physiotherapist.paternalSurname}", fontSize = 25.sp, fontWeight = FontWeight.Bold,
         modifier = Modifier.absolutePadding(top = 10.dp))
         Spacer(modifier = Modifier.height(10.dp))
         Row(
@@ -133,7 +135,7 @@ fun Schedule() {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Spacer(modifier = Modifier.height(16.dp))
-            if (appointments > 20) {
+            if (physiotherapist.age > 20) {
                 Row(verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.absolutePadding(right = 45.dp)) {
                     Icon(
@@ -159,41 +161,26 @@ fun Schedule() {
                             .size(48.dp)
                             .absolutePadding(bottom = 5.dp)
                     )
-                    Text("$appointments", color = Color.Gray, fontWeight = FontWeight.Bold,
+                    Text("${physiotherapist.consultationsQuantity}", color = Color.Gray, fontWeight = FontWeight.Bold,
                         fontSize = 25.sp, modifier = Modifier.absolutePadding(bottom = 5.dp, left = 6.dp))
 
                 }
             }
-            if (videos > 15) {
-                Row(verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.absolutePadding(right = 45.dp)) {
-                    Icon(
-                        painter = painterResource(R.drawable.baseline_video_library_24),
-                        contentDescription = "Videos",
-                        tint = Color(255,0,0),
-                        modifier = Modifier
-                            .size(36.dp)
-                            .absolutePadding(right = 4.dp)
-                    )
-                    Text("15+", color = Color.Gray, fontWeight = FontWeight.Bold,
+
+            Row(verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.absolutePadding(right = 45.dp)) {
+                Icon(
+                    painter = painterResource(R.drawable.baseline_video_library_24),
+                    contentDescription = "Cost",
+                    tint = Color(255,0,0),
+                    modifier = Modifier
+                        .size(36.dp)
+                        .absolutePadding(right = 4.dp)
+                )
+                Text("${physiotherapist.age*2}", color = Color.Gray, fontWeight = FontWeight.Bold,
                     fontSize = 25.sp, modifier = Modifier.absolutePadding(bottom = 5.dp))
                 }
-            } else {
-                Row(verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.absolutePadding(right = 45.dp)) {
-                    Icon(
-                        painter = painterResource(R.drawable.baseline_video_library_24),
-                        contentDescription = "Videos",
-                        tint = Color(255,0,0),
-                        modifier = Modifier
-                            .size(36.dp)
-                            .absolutePadding(right = 2.dp)
-                    )
-                    Text("$videos", color = Color.Gray, fontWeight = FontWeight.Bold,
-                        fontSize = 25.sp, modifier = Modifier.absolutePadding(bottom = 5.dp)
-                    )
-                }
-            }
+
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     painter = painterResource(R.drawable.baseline_star_24),
@@ -203,7 +190,7 @@ fun Schedule() {
                         .size(48.dp)
                         .absolutePadding(bottom = 5.dp)
                 )
-                Text("4.5", color = Color.Gray, fontWeight = FontWeight.Bold,
+                Text("${physiotherapist.rating}", color = Color.Gray, fontWeight = FontWeight.Bold,
                     fontSize = 25.sp, modifier = Modifier.absolutePadding(bottom = 5.dp))
 
             }

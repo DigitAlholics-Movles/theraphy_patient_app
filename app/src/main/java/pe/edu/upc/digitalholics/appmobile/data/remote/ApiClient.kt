@@ -2,12 +2,15 @@ package pe.edu.upc.digitalholics.appmobile.data.remote
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 
 object ApiClient {
     private const val API_BASE_URL = "https://backendproyectotheraphy-production-41c2.up.railway.app/api/v1/"
     private var patientInterface: PatientInterface? = null
     private var treatmentInterface: TreatmentInterface? = null
     private var appointmentInterface: AppointmentInterface? = null
+    private var physiotherapistInterface: PhysiotherapistInterface? = null
+
 
     //esto llama al API
     fun build(): PatientInterface{
@@ -35,5 +38,14 @@ object ApiClient {
             .build()
         appointmentInterface = retrofit.create(AppointmentInterface::class.java)
         return appointmentInterface as AppointmentInterface
+    }
+
+    fun buildPhysiotherapistInterface(): PhysiotherapistInterface{
+        val retrofit=Retrofit.Builder()
+            .baseUrl(API_BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        physiotherapistInterface = retrofit.create(PhysiotherapistInterface::class.java)
+        return physiotherapistInterface as PhysiotherapistInterface
     }
 }

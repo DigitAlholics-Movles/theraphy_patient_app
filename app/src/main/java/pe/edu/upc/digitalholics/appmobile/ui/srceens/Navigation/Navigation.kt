@@ -11,16 +11,19 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import pe.edu.upc.digitalholics.appmobile.data.model.Appointment
 import pe.edu.upc.digitalholics.appmobile.data.model.Patient
+import pe.edu.upc.digitalholics.appmobile.data.model.Physiotherapist
 import pe.edu.upc.digitalholics.appmobile.data.model.Treatment
 import pe.edu.upc.digitalholics.appmobile.data.remote.ApiClient
 import pe.edu.upc.digitalholics.appmobile.data.remote.ApiResponse
 import pe.edu.upc.digitalholics.appmobile.data.remote.AppointmentResponse
+import pe.edu.upc.digitalholics.appmobile.data.remote.PhysiotherapistResponse
 import pe.edu.upc.digitalholics.appmobile.data.remote.TreatmentResponse
 import pe.edu.upc.digitalholics.appmobile.ui.srceens.AppointmentList.AppointmentList
 import pe.edu.upc.digitalholics.appmobile.ui.srceens.PatientList.PatientList
 //import pe.edu.upc.digitalholics.appmobile.ui.srceens.PatientsDetails.Patient
 import pe.edu.upc.digitalholics.appmobile.ui.srceens.PatientsDetails.PatientDetails
 import pe.edu.upc.digitalholics.appmobile.ui.srceens.Payment.Payment
+import pe.edu.upc.digitalholics.appmobile.ui.srceens.PhysiotherapistList
 import pe.edu.upc.digitalholics.appmobile.ui.srceens.Schedule.Schedule
 import pe.edu.upc.digitalholics.appmobile.ui.srceens.TreatmentList.Treatments
 import retrofit2.Call
@@ -31,14 +34,52 @@ import retrofit2.Response
 fun Navigation() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "Payment") {
+    NavHost(navController = navController, startDestination = "PhysiotherapistList") {
 
         composable("Payment") {
             Payment()
         }
 
         composable("Schedule") {
-            Schedule()
+            val physiotherapist = remember {
+                mutableStateOf(
+                    Physiotherapist(
+                        id = "",
+                        firstName = "",
+                        paternalSurname = "",
+                        maternalSurname = "",
+                        age = 0,
+                        rating = "",
+                        location = "",
+                        photoUrl = "",
+                        birthdayDate = "",
+                        consultationsQuantity = "",
+                        specialization = "",
+                        email = "",
+                        userId = ""
+                    )
+                )
+            }
+
+            val driverInterface = ApiClient.buildPhysiotherapistInterface()
+            val getDriver = driverInterface.getPhysiotherapistById(1)
+
+            getDriver.enqueue(object : Callback<Physiotherapist> {
+                override fun onResponse(call: Call<Physiotherapist>, response: Response<Physiotherapist>) {
+                    if (response.isSuccessful) {
+                        physiotherapist.value = response.body()!!
+                    }
+                }
+
+                override fun onFailure(call: Call<Physiotherapist>, t: Throwable) {
+                }
+            })
+
+
+            Schedule(
+                physiotherapist = physiotherapist.value
+            )
+
         }
 
         composable("AppointmentList") {
@@ -79,6 +120,41 @@ fun Navigation() {
             //appointments.value. +=
         }
 
+        composable("PhysiotherapistList") {
+            val physiotherapists = remember {
+                mutableStateOf(emptyList<Physiotherapist>())
+            }
+
+            //PatientDetails(patient = patients.value)
+
+            val physiotherapistInterface = ApiClient.buildPhysiotherapistInterface()
+            val getAllPhysiotherapist = physiotherapistInterface.getAllPhysiotherapist()
+
+            getAllPhysiotherapist.enqueue(object : Callback<PhysiotherapistResponse> {
+                override fun onResponse(
+                    call: Call<PhysiotherapistResponse>,
+                    response: Response<PhysiotherapistResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        physiotherapists.value = response.body()?.physiotherapists!!
+
+                    }
+                }
+
+                override fun onFailure(call: Call<PhysiotherapistResponse>, t: Throwable) {
+
+                }
+            })
+
+            PhysiotherapistList(
+                physiotherapists = physiotherapists.value,
+                selectPhysiotherapist = { index ->
+                    //navController.navigate("physiotherapist/$index")
+                }
+            )
+        }
+
+
         composable("PatientList") {
             val patients = remember {
                 //mutableStateOf(Patient("1","Jose","Del Carpio","20","30","jose@gmail.com","2","https://img.europapress.es/fotoweb/fotonoticia_20081004164743_420.jpg"))
@@ -113,6 +189,8 @@ fun Navigation() {
                 }
             )
         }
+
+
 
         composable(
             "patient/{index}",
@@ -188,3 +266,4 @@ fun Navigation() {
         }
     }
 }
+
