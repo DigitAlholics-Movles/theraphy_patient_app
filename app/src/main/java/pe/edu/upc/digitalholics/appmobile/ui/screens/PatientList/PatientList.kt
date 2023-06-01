@@ -1,6 +1,5 @@
-package pe.edu.upc.digitalholics.appmobile.ui.srceens.PatientList
+package pe.edu.upc.digitalholics.appmobile.ui.screens.PatientList
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -33,7 +32,7 @@ private fun PatientItem(patient: Patient, selectPatient: () -> Unit){
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = patient.id)
+            Text(text = "asdad" +patient.id)
         }
     }
 }

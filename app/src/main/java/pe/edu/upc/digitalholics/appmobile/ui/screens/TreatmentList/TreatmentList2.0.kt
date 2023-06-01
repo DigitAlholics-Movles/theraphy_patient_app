@@ -1,4 +1,4 @@
-package pe.edu.upc.digitalholics.appmobile.ui.srceens.TreatmentList
+package pe.edu.upc.digitalholics.appmobile.ui.screens.TreatmentList
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image

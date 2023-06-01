@@ -1,10 +1,8 @@
-package pe.edu.upc.digitalholics.appmobile.ui.srceens.TreatmentDetails
+package pe.edu.upc.digitalholics.appmobile.ui.screens.TreatmentDetails
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 
 
@@ -43,12 +41,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import pe.edu.upc.digitalholics.appmobile.data.model.Treatment
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 

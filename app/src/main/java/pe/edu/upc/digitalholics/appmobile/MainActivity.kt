@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import pe.edu.upc.digitalholics.appmobile.ui.srceens.Navigation.Navigation
+import pe.edu.upc.digitalholics.appmobile.ui.screens.Navigation.Navigation
 import pe.edu.upc.digitalholics.appmobile.ui.theme.AppmobileTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +23,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Navigation()
+                //Structure()
+                Navigation()
                 }
             }
         }

@@ -1,4 +1,4 @@
-package pe.edu.upc.digitalholics.appmobile.ui.srceens.PatientProfile
+package pe.edu.upc.digitalholics.appmobile.ui.screens.PatientProfile
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
@@ -23,7 +23,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -32,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -41,13 +39,8 @@ import androidx.navigation.NavController
 
 import coil.compose.AsyncImage
 
-import pe.edu.upc.digitalholics.appmobile.R
 import pe.edu.upc.digitalholics.appmobile.data.model.Patient
-import pe.edu.upc.digitalholics.appmobile.data.model.Treatment
-import pe.edu.upc.digitalholics.appmobile.ui.srceens.TreatmentDetails.Footer
-import pe.edu.upc.digitalholics.appmobile.ui.srceens.TreatmentDetails.TreatmentDescription
-import pe.edu.upc.digitalholics.appmobile.ui.srceens.TreatmentDetails.TreatmentDetailImage
-import pe.edu.upc.digitalholics.appmobile.ui.srceens.TreatmentDetails.TreatmentTitle
+import pe.edu.upc.digitalholics.appmobile.ui.screens.TreatmentDetails.Footer
 import kotlin.random.Random
 
 

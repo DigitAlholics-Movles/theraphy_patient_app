@@ -1,4 +1,4 @@
-package pe.edu.upc.digitalholics.appmobile.ui.srceens.TreatmentList
+package pe.edu.upc.digitalholics.appmobile.ui.screens.TreatmentList
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -38,7 +38,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import pe.edu.upc.digitalholics.appmobile.R
-import pe.edu.upc.digitalholics.appmobile.data.model.Patient
 import pe.edu.upc.digitalholics.appmobile.data.model.Treatment
 
 @OptIn(ExperimentalMaterial3Api::class)
