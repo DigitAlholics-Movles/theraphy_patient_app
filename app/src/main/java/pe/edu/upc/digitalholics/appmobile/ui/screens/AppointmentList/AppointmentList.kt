@@ -140,8 +140,8 @@ navController: NavController){
                                 }
 
                             }
-
                             dona = ToggleButtonExample()
+
                         }
 
 
@@ -178,6 +178,7 @@ fun ToggleButtonExample(): String {
         )
     }
 
+
     Row(modifier = Modifier.absolutePadding(left = 20.dp) ) {
         Text(text = "Done", modifier = Modifier.absolutePadding(top = 12.dp))
 
@@ -185,14 +186,15 @@ fun ToggleButtonExample(): String {
             checked = isChecked.value,
             onCheckedChange = { isChecked.value = it
                               if(isChecked.value){
-                                  dona = "1"
+                                  dona ="1"
                               }else{
                                   dona = "0"
                               }},
             modifier = Modifier.absolutePadding(left = 10.dp,bottom = 50.dp)
         )
     }
-
+    if(dona=="")
+        return "0"
     return dona
 }
 
