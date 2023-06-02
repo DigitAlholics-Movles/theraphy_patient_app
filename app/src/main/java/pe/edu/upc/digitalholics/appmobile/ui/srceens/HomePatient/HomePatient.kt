@@ -88,7 +88,7 @@ fun FirstHome(patient: Patient){
 @Composable
 fun MyPhysiotherapists(physiotherapist: Physiotherapist) {
 //    con lazy column
-    Spacer(modifier = Modifier.padding(top = 60.dp))
+    Spacer(modifier = Modifier.padding(top = 50.dp))
     Text("My physiotherapists", modifier = Modifier.padding(start = 12.dp), fontWeight = FontWeight.Bold)
     Surface(
         modifier = Modifier
@@ -131,12 +131,11 @@ fun MyTreatments(treatments: Treatment, selectTreatment: () -> Unit){
         shape = MaterialTheme.shapes.medium,
         color = Color.Transparent
     ) {
-//        Row() {
             Row(
-                modifier = Modifier.padding(3.dp)
+                modifier = Modifier.padding(2.dp).clip(shape = RoundedCornerShape(8.dp))
                     .background(Color(132, 170, 255, 255))
                 .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                Column(modifier = Modifier.fillMaxWidth(),
+                Column(modifier = Modifier.fillMaxWidth().padding(6.dp),
                     horizontalAlignment = Alignment.CenterHorizontally) {
 
                     AsyncImage(
@@ -149,7 +148,7 @@ fun MyTreatments(treatments: Treatment, selectTreatment: () -> Unit){
                             .border(BorderStroke(5.dp, Color.White)),
                         contentScale = ContentScale.Crop
                     )
-//                Spacer(modifier = Modifier.height(80.dp))
+
                     Text(text = treatments.title, fontWeight = FontWeight.Bold)
                     Text(text = "Quantity Sessions: ${treatments.sessionsQuantity}")
                     Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(6.dp)) {
@@ -157,151 +156,12 @@ fun MyTreatments(treatments: Treatment, selectTreatment: () -> Unit){
                     }
                 }
             }
-//            Column(modifier = Modifier.padding(3.dp)) {
-//                //image
-//                Image(painter = painterResource(id = R.drawable.lumbar),
-//                    contentDescription = null,
-//                    modifier = Modifier
-//                        .width(170.dp)
-//                        .height(170.dp)
-//                        .padding(3.dp)
-//                )
-////                Spacer(modifier = Modifier.height(80.dp))
-//                Text(text = treatments.title, fontWeight = FontWeight.Bold)
-//                Text(text = "Quantity Sessions: ${treatments.sessionsQuantity}")
-//                Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(6.dp)) {
-//                    Text(text = "Info")
-//                }
-//            }
-//        }
+
     }
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun TreatmentItem(treatment: Treatment, selectTreatment: () -> Unit){
-    Card(
-        onClick = {
-            selectTreatment()
-        }) {
-//        Column(modifier = Modifier.padding(12.dp)) {
-//            Text(text = "Find your treatment", fontWeight = FontWeight.Bold)
-//        Spacer(modifier = Modifier.height(10.dp))
-//            Row(){
-//                Box(contentAlignment = Alignment.CenterEnd, modifier = Modifier
-//                    .clip(shape = RoundedCornerShape(8.dp))
-//                    .border(
-//                        BorderStroke(1.dp, Color.Magenta)
-//                    )){
-//                    TextField(value ="" , onValueChange = {})
-//                    IconButton(onClick = { /*TODO*/ }) {
-//                        Icon(imageVector = Icons.Default.Search, contentDescription = null)
-//                    }
-//                }
-//            }
-//        Spacer(modifier = Modifier.height(20.dp))
-            Row() {
-                Card(modifier = Modifier.padding(3.dp)) {
-                    //image
-                    Image(painter = painterResource(id = R.drawable.lumbar),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .width(170.dp)
-                            .height(170.dp)
-                            .padding(3.dp)
-                    )
-//                Spacer(modifier = Modifier.height(80.dp))
-                    Text(text = treatment.title, fontWeight = FontWeight.Bold)
-                    Text(text = "Quantity Sessions: ${treatment.sessionsQuantity}")
-                    Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(6.dp)) {
-                        Text(text = "Info")
-                    }
-                }
-//                Card(modifier = Modifier.padding(3.dp)) {
-//                    //image
-//                    Image(painter = painterResource(id = R.drawable.lumbar),
-//                        contentDescription = null,
-//                        modifier = Modifier
-//                            .width(170.dp)
-//                            .height(170.dp)
-//                            .padding(3.dp)
-//                    )
-////                Spacer(modifier = Modifier.height(80.dp))
-//                    Text(text = treatment.title, fontWeight = FontWeight.Bold)
-//                    Text(text = "Quantity Sessions: ${treatment.sessionsQuantity}")
-//                    Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(6.dp)) {
-//                        Text(text = "Info")
-//                    }
-//                }
-            }
-//            Row() {
-//                Card(modifier = Modifier.padding(3.dp)) {
-//                    //image
-//                    Image(painter = painterResource(id = R.drawable.lumbar),
-//                        contentDescription = null,
-//                        modifier = Modifier
-//                            .width(170.dp)
-//                            .height(170.dp)
-//                            .padding(3.dp)
-//                    )
-////                Spacer(modifier = Modifier.height(80.dp))
-//                    Text(text = treatment.title, fontWeight = FontWeight.Bold)
-//                    Text(text = "Quantity Sessions: ${treatment.sessionsQuantity}")
-//                    Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(6.dp)) {
-//                        Text(text = "Info")
-//                    }
-//                }
-//                Card(modifier = Modifier.padding(3.dp)) {
-//                    //image
-//                    Image(painter = painterResource(id = R.drawable.lumbar),
-//                        contentDescription = null,
-//                        modifier = Modifier
-//                            .width(170.dp)
-//                            .height(170.dp)
-//                            .padding(3.dp)
-//                    )
-////                Spacer(modifier = Modifier.height(80.dp))
-//                    Text(text = treatment.title, fontWeight = FontWeight.Bold)
-//                    Text(text = "Quantity Sessions: ${treatment.sessionsQuantity}")
-//                    Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(6.dp)) {
-//                        Text(text = "Info")
-//                    }
-//                }
-//            }
-//            Spacer(modifier = Modifier.height(10.dp))
 
-
-//        Spacer(modifier = Modifier.height(90.dp))
-//            Box(modifier = Modifier
-//                .fillMaxWidth()
-//                .border(3.dp, Color.Magenta),contentAlignment = Alignment.Center
-//            ) {
-//                Row(modifier = Modifier.padding(10.dp)) {
-//                    IconButton(onClick = { /*TODO*/ }) {
-//                        Icon(imageVector = Icons.Default.Home, contentDescription = null)
-//                    }
-//                    Spacer(modifier = Modifier.width(30.dp))
-//                    IconButton(onClick = { /*TODO*/ }) {
-//                        Icon(imageVector = Icons.Default.AccountBox, contentDescription = null)
-//                    }
-//                    Spacer(modifier = Modifier.width(30.dp))
-//                    IconButton(onClick = { /*TODO*/ }) {
-//                        Icon(imageVector = Icons.Default.Info, contentDescription = null)
-//                    }
-//                    Spacer(modifier = Modifier.width(30.dp))
-//                    IconButton(onClick = { /*TODO*/ }) {
-//                        Icon(imageVector = Icons.Default.List, contentDescription = null)
-//                    }
-//                    Spacer(modifier = Modifier.width(30.dp))
-//                    IconButton(onClick = { /*TODO*/ }) {
-//                        Icon(imageVector = Icons.Default.Face, contentDescription = null)
-//                    }
-//                }
-//            }
-//        }
-    }
-}
 
 @Composable
 fun LongCard(patient:Patient) {
@@ -309,30 +169,34 @@ fun LongCard(patient:Patient) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
+
         shape = MaterialTheme.shapes.medium,
         color = MaterialTheme.colorScheme.primary
     ) {
         Column(
-            modifier = Modifier.padding(10.dp)
+            modifier = Modifier.padding(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = { /*TODO*/ }) {
 //                    Icon(imageVector = Icons.Default.Campaign, contentDescription = "Campaign Icon")
                 }
                 Text(text = "Patient name: ${patient.firstName}", style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(6f), fontWeight = FontWeight.Bold)
+
                 Text(
                     text = "00:00",
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier
                         .weight(1f)
-                        .padding(top = 8.dp)
+
+
                 )
             }
         }
     }
-    Spacer(modifier = Modifier.padding(5.dp))
+    Spacer(modifier = Modifier.padding(bottom = 5.dp))
     Text("My treatments", modifier = Modifier.padding(start = 12.dp), fontWeight = FontWeight.Bold)
-    Spacer(modifier = Modifier.padding(6.dp))
+    Spacer(modifier = Modifier.padding(bottom = 6.dp))
 }
 
 @Composable

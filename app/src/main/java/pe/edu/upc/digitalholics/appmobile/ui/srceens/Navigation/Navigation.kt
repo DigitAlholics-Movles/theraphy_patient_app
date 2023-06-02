@@ -37,7 +37,7 @@ import retrofit2.Response
 fun Navigation() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "FindYourPhysiotherapist") {
+    NavHost(navController = navController, startDestination = "HomePatient") {
 
         composable("Payment") {
             Payment()
