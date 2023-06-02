@@ -116,18 +116,21 @@ fun PhysiotherapistList(navController: NavController,physiotherapists: List<Phys
 
 
                         }
-                        LazyColumn(Modifier.height(500.dp)){
-                            itemsIndexed(pacientutos){ index, item ->
-                                PhysiotherapistItem(navController,item, searchedText.text
-                                )
-                            }
-                        }
+
                     }
 
                 }
 
             }
-
+            LazyColumn(Modifier.height(660.dp)
+                .absolutePadding(top = 150.dp, left = 22.dp)
+                .width(350.dp),
+                horizontalAlignment = Alignment.CenterHorizontally){
+                itemsIndexed(pacientutos){ index, item ->
+                    PhysiotherapistItem(navController,item, searchedText.text
+                    )
+                }
+            }
 
         },
         bottomBar = {
