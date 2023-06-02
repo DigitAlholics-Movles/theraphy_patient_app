@@ -40,6 +40,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 
 import pe.edu.upc.digitalholics.appmobile.data.model.Patient
+import pe.edu.upc.digitalholics.appmobile.ui.screens.FooterStructure
 import pe.edu.upc.digitalholics.appmobile.ui.screens.TreatmentDetails.Footer
 import kotlin.random.Random
 
@@ -71,8 +72,10 @@ fun PatientProfile(patient: Patient, navController: NavController) {
                         PatientProfileDetails(patient = patient)
                     }
                 }
-                Footer()
             }
+        },
+        bottomBar = {
+            FooterStructure(navController)
         }
     )
 }

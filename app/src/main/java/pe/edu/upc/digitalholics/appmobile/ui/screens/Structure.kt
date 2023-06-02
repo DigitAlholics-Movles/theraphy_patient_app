@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -62,6 +63,7 @@ fun Structure( modifier: Modifier = Modifier){
             LazyColumn(modifier = Modifier.padding(top = 70.dp)
                 .fillMaxHeight()
                 .padding(bottom = 100.dp)
+
                ) {
                 item {
 
@@ -73,7 +75,7 @@ fun Structure( modifier: Modifier = Modifier){
         },
        bottomBar = {
         Box(modifier = Modifier.background(Color.White)){
-            FooterStructure()
+            //FooterStructure()
         }
 
 
@@ -83,7 +85,7 @@ fun Structure( modifier: Modifier = Modifier){
 
 
 @Composable
-fun FooterStructure(){
+fun FooterStructure(navController: NavController){
     Spacer(modifier = Modifier.padding(4.dp))
     Surface(
         modifier = Modifier
@@ -97,23 +99,23 @@ fun FooterStructure(){
         color = Color.White
     ) {
         Row(modifier = Modifier.padding(10.dp)) {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { navController.navigate("HomePatient") }) {
                 Icon(imageVector = Icons.Default.Home, contentDescription = null)
             }
             Spacer(modifier = Modifier.width(30.dp))
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { navController.navigate("physiotherapistList") }) {
                 Icon(imageVector = Icons.Default.AccountBox, contentDescription = null)
             }
             Spacer(modifier = Modifier.width(30.dp))
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { navController.navigate("AppointmentList") }) {
                 Icon(imageVector = Icons.Default.Info, contentDescription = null)
             }
             Spacer(modifier = Modifier.width(30.dp))
-            IconButton(onClick =  { /*TODO*/ }) {
+            IconButton(onClick =  { navController.navigate("TreatmentList") }) {
                 Icon(imageVector = Icons.Default.List, contentDescription = null)
             }
             Spacer(modifier = Modifier.width(30.dp))
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { navController.navigate("patient") }) {
                 Icon(imageVector = Icons.Default.Face, contentDescription = null)
             }
         }

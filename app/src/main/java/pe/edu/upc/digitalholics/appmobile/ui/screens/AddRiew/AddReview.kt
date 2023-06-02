@@ -194,7 +194,7 @@ fun AddReview(physiotherapist: Physiotherapist, reviews: List<Review>, navContro
         },
         bottomBar = {
             Box(modifier = Modifier.background(Color.White)){
-                FooterStructure()
+                FooterStructure(navController)
             }
 
 

@@ -9,6 +9,8 @@ object ApiClient {
     private var treatmentInterface: TreatmentInterface? = null
     private var reviewInterface: ReviewInterface? = null
     private var physiotherapistInterface: PhysiotherapistInterface? = null
+    private var appointmentInterface: AppointmentInterface? = null
+
 
     //esto llama al API
     fun buildPatientInterface(): PatientInterface{
@@ -45,5 +47,14 @@ object ApiClient {
             .build()
         physiotherapistInterface = retrofit.create(PhysiotherapistInterface::class.java)
         return physiotherapistInterface as PhysiotherapistInterface
+    }
+
+    fun buildAppointmentInterface(): AppointmentInterface{
+        val retrofit = Retrofit.Builder()
+            .baseUrl(API_BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        appointmentInterface = retrofit.create(AppointmentInterface::class.java)
+        return appointmentInterface as AppointmentInterface
     }
 }

@@ -48,12 +48,12 @@ import pe.edu.upc.digitalholics.appmobile.R
 import pe.edu.upc.digitalholics.appmobile.data.model.Physiotherapist
 import pe.edu.upc.digitalholics.appmobile.data.model.Review
 import pe.edu.upc.digitalholics.appmobile.ui.screens.FooterStructure
+import java.util.concurrent.ScheduledExecutorService
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PhysiotherapistProfile(physiotherapist: Physiotherapist, reviews: List<Review>,navController: NavController, modifier: Modifier = Modifier) {
-
 
     Scaffold(
         topBar = {
@@ -74,10 +74,10 @@ fun PhysiotherapistProfile(physiotherapist: Physiotherapist, reviews: List<Revie
             )
         },
         content = {
-            LazyColumn(modifier = Modifier.padding(top = 70.dp)
+            Column(modifier = Modifier
+                .padding(top = 70.dp)
                 .fillMaxHeight()
                 .padding(bottom = 100.dp)) {
-                item {
 
                     Column(
                         modifier = Modifier
@@ -104,7 +104,7 @@ fun PhysiotherapistProfile(physiotherapist: Physiotherapist, reviews: List<Revie
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Spacer(modifier = Modifier.height(16.dp))
-                            if (physiotherapist.age > 20) {
+                            if (physiotherapist.consultationsQuantity > 20) {
                                 Row(verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier.absolutePadding(right = 45.dp)) {
                                     Icon(
@@ -167,11 +167,11 @@ fun PhysiotherapistProfile(physiotherapist: Physiotherapist, reviews: List<Revie
 
                             }
                         }
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(1.dp))
 
                         Reviews(physiotherapist,reviews)
 
-                        Spacer(modifier = Modifier.height(30.dp))
+                        Spacer(modifier = Modifier.height(10.dp))
 
                         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically){
                             Spacer(modifier = Modifier.width(20.dp))
@@ -189,7 +189,7 @@ fun PhysiotherapistProfile(physiotherapist: Physiotherapist, reviews: List<Revie
                             }
                             Spacer(modifier = Modifier.width(25.dp))
                             Button(onClick = {
-
+                                navController.navigate("Schedule/${physiotherapist.id}")
                             },
                                 modifier = Modifier
                                     .width(170.dp),
@@ -206,13 +206,13 @@ fun PhysiotherapistProfile(physiotherapist: Physiotherapist, reviews: List<Revie
 
 
                     }
-                }
+
 
             }
         },
         bottomBar = {
             Box(modifier = Modifier.background(Color.White)){
-               FooterStructure()
+               FooterStructure(navController)
             }
 
 
@@ -228,50 +228,56 @@ fun Reviews(physiotherapist: Physiotherapist,reviews: List<Review>){
     Text(text = "Reviews",fontWeight = FontWeight.Bold,
         fontSize = 25.sp)
 
-    Spacer(modifier = Modifier.height(20.dp))
-
-    reviews.forEach { review ->
-        if (review.physiotherapist.id == physiotherapist.id) {
-            Spacer(modifier = Modifier.height(5.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                AsyncImage(
-                    model = review.patient.photoUrl,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(50.dp)
-                        .clip(shape = RoundedCornerShape(8.dp)),
-                    contentScale = ContentScale.Crop
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Column {
-                    Row(){
-                        Text(text = review.patient.firstName + " " + review.patient.lastName, fontWeight = FontWeight.Bold,
-                            fontSize = 15.sp
-                        )
-                        Spacer(modifier = Modifier.width(150.dp))
-
-
-                        Text(text = "${review.stars}", fontWeight = FontWeight.Bold,
-                            fontSize = 15.sp)
-                        Icon(
-                            painter = painterResource(R.drawable.baseline_star_24),
-                            contentDescription = "Stars",
-                            tint = Color(250,200,0),
+    Spacer(modifier = Modifier.height(10.dp))
+    LazyColumn(modifier = Modifier.height(170.dp)) {
+        item {
+            reviews.forEach { review ->
+                if (review.physiotherapist.id == physiotherapist.id) {
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        AsyncImage(
+                            model = review.patient.photoUrl,
+                            contentDescription = null,
                             modifier = Modifier
-                                .size(24.dp)
-                                .absolutePadding(bottom = 5.dp)
+                                .size(50.dp)
+                                .clip(shape = RoundedCornerShape(8.dp)),
+                            contentScale = ContentScale.Crop
                         )
-                    }
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Column {
+                            Row() {
+                                Text(
+                                    text = review.patient.firstName + " " + review.patient.lastName,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 15.sp
+                                )
+                                Spacer(modifier = Modifier.width(150.dp))
 
-                    Text(text = review.description)
+
+                                Text(
+                                    text = "${review.stars}", fontWeight = FontWeight.Bold,
+                                    fontSize = 15.sp
+                                )
+                                Icon(
+                                    painter = painterResource(R.drawable.baseline_star_24),
+                                    contentDescription = "Stars",
+                                    tint = Color(250, 200, 0),
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .absolutePadding(bottom = 5.dp)
+                                )
+                            }
+
+                            Text(text = review.description)
+
+                        }
+
+                    }
 
                 }
 
             }
-
         }
-
-
     }
 
 }

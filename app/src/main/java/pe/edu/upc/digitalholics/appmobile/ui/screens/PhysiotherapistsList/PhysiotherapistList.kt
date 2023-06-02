@@ -132,7 +132,7 @@ fun PhysiotherapistList(navController: NavController,physiotherapists: List<Phys
         },
         bottomBar = {
             Box(modifier = Modifier.background(Color.White)){
-                FooterStructure()
+                FooterStructure(navController)
             }
 
 
@@ -147,7 +147,7 @@ fun PhysiotherapistList(navController: NavController,physiotherapists: List<Phys
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PhysiotherapistItem(navController: NavController,physiotherapist: Physiotherapist,  searchedText:String){
-    if(physiotherapist.firstName.contains(searchedText) || physiotherapist.paternalSurname.contains(searchedText))
+    if(physiotherapist.firstName.uppercase().contains(searchedText.uppercase()) || physiotherapist.paternalSurname.uppercase().contains(searchedText.uppercase()))
         Row() {
             Card(onClick = {
                 navController.navigate(

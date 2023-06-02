@@ -46,6 +46,7 @@ import coil.compose.AsyncImage
 import pe.edu.upc.digitalholics.appmobile.data.model.Treatment
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import pe.edu.upc.digitalholics.appmobile.ui.screens.FooterStructure
 
 @Composable
 fun Treatments(treatments: List<Treatment>){
@@ -82,8 +83,10 @@ fun TreatmentDetails(treatment: Treatment, navController: NavController) {
                         TreatmentDescription(treatment = treatment)
                     }
                 }
-                Footer()
             }
+        },
+        bottomBar = {
+            FooterStructure(navController)
         }
     )
 }
