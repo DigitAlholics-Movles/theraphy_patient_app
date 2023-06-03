@@ -1,6 +1,7 @@
 package pe.edu.upc.digitalholics.appmobile.ui.screens
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -28,9 +29,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 
 import androidx.compose.ui.unit.dp
@@ -86,6 +89,13 @@ fun Structure( modifier: Modifier = Modifier){
 
 @Composable
 fun FooterStructure(navController: NavController){
+
+    val context = LocalContext.current
+    val sharedPreferences = remember {
+        context.getSharedPreferences("mi_pref", Context.MODE_PRIVATE)
+    }
+    val id = sharedPreferences.getString("userLogged", "0")
+
     Spacer(modifier = Modifier.padding(4.dp))
     Surface(
         modifier = Modifier
@@ -99,7 +109,7 @@ fun FooterStructure(navController: NavController){
         color = Color.White
     ) {
         Row(modifier = Modifier.padding(10.dp)) {
-            IconButton(onClick = { navController.navigate("HomePatient") }) {
+            IconButton(onClick = { navController.navigate("HomePatient/${id}") }) {
                 Icon(imageVector = Icons.Default.Home, contentDescription = null)
             }
             Spacer(modifier = Modifier.width(30.dp))

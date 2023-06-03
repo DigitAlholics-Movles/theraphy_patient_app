@@ -1,15 +1,11 @@
 package pe.edu.upc.digitalholics.appmobile.ui.screens.Navigation
 
-import android.app.Activity
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavType
-import androidx.navigation.Navigation
-import androidx.navigation.activity
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -19,13 +15,16 @@ import pe.edu.upc.digitalholics.appmobile.data.model.Patient
 import pe.edu.upc.digitalholics.appmobile.data.model.Physiotherapist
 import pe.edu.upc.digitalholics.appmobile.data.model.Review
 import pe.edu.upc.digitalholics.appmobile.data.model.Treatment
+import pe.edu.upc.digitalholics.appmobile.data.model.User
 import pe.edu.upc.digitalholics.appmobile.data.remote.ApiClient
 import pe.edu.upc.digitalholics.appmobile.data.remote.AppointmentResponse
-import pe.edu.upc.digitalholics.appmobile.data.remote.PatientResponse
 import pe.edu.upc.digitalholics.appmobile.data.remote.PhysiotherapistResponse
 import pe.edu.upc.digitalholics.appmobile.data.remote.ReviewResponse
 import pe.edu.upc.digitalholics.appmobile.data.remote.TreatmentResponse
+import pe.edu.upc.digitalholics.appmobile.data.remote.UserResponse
 import pe.edu.upc.digitalholics.appmobile.ui.screens.AddRiew.AddReview
+import pe.edu.upc.digitalholics.appmobile.ui.screens.InitialsViews.LoginScreen
+import pe.edu.upc.digitalholics.appmobile.ui.screens.InitialsViews.SignUpScreen
 import pe.edu.upc.digitalholics.appmobile.ui.screens.PatientProfile.PatientProfile
 //import pe.edu.upc.digitalholics.appmobile.ui.srceens.PatientsDetails.Patient
 import pe.edu.upc.digitalholics.appmobile.ui.screens.PatientsDetails.PatientDetails
@@ -35,7 +34,6 @@ import pe.edu.upc.digitalholics.appmobile.ui.screens.TreatmentDetails.TreatmentD
 import pe.edu.upc.digitalholics.appmobile.ui.screens.TreatmentList.Treatments
 import pe.edu.upc.digitalholics.appmobile.ui.srceens.AppointmentList.AppointmentList
 import pe.edu.upc.digitalholics.appmobile.ui.srceens.HomePatient.Home
-import pe.edu.upc.digitalholics.appmobile.ui.srceens.HomePatient.HomePatient
 import pe.edu.upc.digitalholics.appmobile.ui.srceens.Payment.Payment
 import pe.edu.upc.digitalholics.appmobile.ui.srceens.Schedule.Schedule
 import retrofit2.Call
@@ -46,7 +44,7 @@ import retrofit2.Response
 fun Navigation() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "HomePatient") {
+    NavHost(navController = navController, startDestination = "LoginView") {
 
 
 
@@ -478,13 +476,14 @@ fun Navigation() {
 
         }
 
-        composable("HomePatient"){
+        composable("HomePatient/{patientId}",arguments = listOf(navArgument("patientId") { type = NavType.StringType })){
+            val patientId = it.arguments?.getString("patientId") as String
             val context = LocalContext.current
             val sharedPreferences = remember {
                 context.getSharedPreferences("mi_pref", Context.MODE_PRIVATE)
             }
             val editor = sharedPreferences.edit()
-            editor.putString("userLogged", "1")
+            editor.putString("userLogged", patientId)
             editor.apply()
 
 //            val patients = remember {
@@ -521,7 +520,7 @@ fun Navigation() {
                     Patient(
                         1,
                         1,
-                        "Jose",
+                        "",
                         "Del Carpio",
                         20,
                         "jose@gmail.com",
@@ -533,7 +532,7 @@ fun Navigation() {
             }
 
             val driverInterface = ApiClient.buildPatientInterface()
-            val getDriver = driverInterface.getPatientById("1")
+            val getDriver = driverInterface.getPatientById(patientId)
 
             getDriver.enqueue(object : Callback<Patient> {
                 override fun onResponse(call: Call<Patient>, response: Response<Patient>) {
@@ -624,5 +623,40 @@ fun Navigation() {
             )
 
         }
+
+        composable("SignUPView"){
+            SignUpScreen(navController)
+        }
+
+        composable("LoginView"){
+
+            val users = remember {
+                mutableStateOf(emptyList<User>())
+            }
+
+            val userInterface = ApiClient.buildUserInterface()
+            val getAllUser = userInterface.getAllUsers()
+
+            getAllUser.enqueue(object : Callback<UserResponse>{
+                override fun onResponse(
+                    call: Call<UserResponse>,
+                    response: Response<UserResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        users.value = response.body()?.users!!
+
+                    }
+                }
+
+                override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                    TODO("Not yet implemented")
+                }
+
+            })
+
+            LoginScreen(users.value,navController)
+        }
+
     }
 }
+

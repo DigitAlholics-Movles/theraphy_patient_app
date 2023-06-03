@@ -69,7 +69,7 @@ fun PatientProfile(patient: Patient, navController: NavController) {
                         PatientProfilelImage(patient = patient)
                     }
                     item {
-                        PatientProfileDetails(patient = patient)
+                        PatientProfileDetails(patient = patient, navController = navController)
                     }
                 }
             }
@@ -118,7 +118,8 @@ fun PatientProfilelImage(
 @Composable
 fun PatientProfileDetails(
     patient: Patient,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     Spacer(modifier = modifier.height(20.dp))
     Row(modifier = modifier) {
@@ -210,8 +211,8 @@ fun PatientProfileDetails(
         Button(onClick = { /* acción al hacer clic en el botón */ }) {
             Text(text = "Medical History")
         }
-        Button(onClick = { /* acción al hacer clic en el botón */ }) {
-            Text(text = "Edit")
+        Button(onClick = { navController.navigate("LoginView") }) {
+            Text(text = "Log Out")
         }
     }
 }
