@@ -1,4 +1,4 @@
-package pe.edu.upc.digitalholics.appmobile.ui.srceens.PatientsDetails
+package pe.edu.upc.digitalholics.appmobile.ui.screens.PatientsDetails
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
