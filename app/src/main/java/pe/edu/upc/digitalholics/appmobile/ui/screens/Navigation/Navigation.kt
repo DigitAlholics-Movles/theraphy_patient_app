@@ -23,6 +23,8 @@ import pe.edu.upc.digitalholics.appmobile.data.remote.ReviewResponse
 import pe.edu.upc.digitalholics.appmobile.data.remote.TreatmentResponse
 import pe.edu.upc.digitalholics.appmobile.data.remote.UserResponse
 import pe.edu.upc.digitalholics.appmobile.ui.screens.AddRiew.AddReview
+import pe.edu.upc.digitalholics.appmobile.ui.screens.InitialsViews.EnterCodeScream
+import pe.edu.upc.digitalholics.appmobile.ui.screens.InitialsViews.ForgotPasswordScream
 import pe.edu.upc.digitalholics.appmobile.ui.screens.InitialsViews.LoginScreen
 import pe.edu.upc.digitalholics.appmobile.ui.screens.InitialsViews.SignUpScreen
 import pe.edu.upc.digitalholics.appmobile.ui.screens.PatientProfile.PatientProfile
@@ -43,6 +45,7 @@ import retrofit2.Response
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
+    val randomNumber = remember { mutableStateOf(0) }
 
     NavHost(navController = navController, startDestination = "LoginView") {
 
@@ -628,6 +631,35 @@ fun Navigation() {
             SignUpScreen(navController)
         }
 
+        composable("ForgotPasswordView"){
+
+            val users = remember {
+                mutableStateOf(emptyList<User>())
+            }
+
+            val userInterface = ApiClient.buildUserInterface()
+            val getAllUser = userInterface.getAllUsers()
+
+            getAllUser.enqueue(object : Callback<UserResponse>{
+                override fun onResponse(
+                    call: Call<UserResponse>,
+                    response: Response<UserResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        users.value = response.body()?.users!!
+
+                    }
+                }
+
+                override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                    TODO("Not yet implemented")
+                }
+
+            })
+
+            ForgotPasswordScream(users.value,navController)
+        }
+
         composable("LoginView"){
 
             val users = remember {
@@ -657,6 +689,37 @@ fun Navigation() {
             LoginScreen(users.value,navController)
         }
 
+        composable("EnterCodeView/{userId}/{randomNumber}", arguments = listOf(navArgument("userId") { type = NavType.StringType }, navArgument("randomNumber") { type = NavType.IntType })) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("userId")
+            val randomNumber = backStackEntry.arguments?.getInt("randomNumber") ?: 0
+
+
+            val users = remember {
+                mutableStateOf(emptyList<User>())
+            }
+
+            val userInterface = ApiClient.buildUserInterface()
+            val getAllUser = userInterface.getAllUsers()
+
+            getAllUser.enqueue(object : Callback<UserResponse>{
+                override fun onResponse(
+                    call: Call<UserResponse>,
+                    response: Response<UserResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        users.value = response.body()?.users!!
+
+                    }
+                }
+
+                override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                    TODO("Not yet implemented")
+                }
+
+            })
+
+            EnterCodeScream(users.value,userId = userId, randomNumber = randomNumber, navController)
+        }
     }
 }
 

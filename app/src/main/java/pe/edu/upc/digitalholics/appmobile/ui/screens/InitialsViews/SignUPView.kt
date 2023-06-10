@@ -83,7 +83,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-@SuppressLint("UnrememberedMutableState")
+@SuppressLint("UnrememberedMutableState", "SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen(navController: NavController) {
@@ -312,7 +312,7 @@ fun SignUpScreen(navController: NavController) {
                 )
             },
             title = {
-                Text(text = "Comprate Ipone brother")
+                Text(text = "It will come in flutter")
             },
 
             confirmButton = {
@@ -321,7 +321,7 @@ fun SignUpScreen(navController: NavController) {
                 ), modifier = Modifier.absolutePadding(right = 60.dp)
                     ,onClick = { showDialog = false
                         navController.navigate("LoginView")}) {
-                    Text(text = "Go Pipipi")
+                    Text(text = "Back to Loging")
                 }
             },
             modifier = Modifier.padding(16.dp)
