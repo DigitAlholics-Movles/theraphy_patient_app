@@ -5,6 +5,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,6 +28,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -188,15 +190,15 @@ private fun PhysiotherapistItem(navController: NavController,physiotherapist: Ph
                             Box(contentAlignment = Alignment.Center,
                                 modifier = Modifier
                                     .height(25.dp)
-                                    .width(62.dp)
                                     .absolutePadding(right = 8.dp)
                                     .clip(shape = RoundedCornerShape(8.dp))
-                                    .background(Color(255, 255, 255))
                             ) {
-                                Text(text = "Stars: " + physiotherapist.rating +"/5", fontSize = 10.sp,
-                                    modifier = Modifier.background(Color(255,255,255)))
+
+                                FiveStarRating(physiotherapist)
+                                /*Text(text = "Stars: " + physiotherapist.rating +"/5", fontSize = 10.sp,
+                                    modifier = Modifier.background(Color(255,255,255)))*/
                             }
-                            Box(contentAlignment = Alignment.Center,
+                            /*Box(contentAlignment = Alignment.Center,
                                 modifier = Modifier
                                     .height(25.dp)
                                     .width(200.dp)
@@ -205,7 +207,7 @@ private fun PhysiotherapistItem(navController: NavController,physiotherapist: Ph
                                     .background(Color(255, 255, 255))
                             ) {
                                 Text(text = "Appointment Consultations: " + physiotherapist.consultationsQuantity, fontSize = 10.sp)
-                            }
+                            }*/
                         }
 
                     }
@@ -217,3 +219,27 @@ private fun PhysiotherapistItem(navController: NavController,physiotherapist: Ph
 
         }
 }
+
+
+@Composable
+fun FiveStarRating(physiotherapist: Physiotherapist) {
+    Row {
+        repeat(physiotherapist.rating) {
+            Icon(
+                imageVector = Icons.Default.Star,
+                contentDescription = null, // Descripción opcional para accesibilidad
+                tint = Color.Yellow,
+                modifier = Modifier.size(24.dp)
+            )
+        }
+        repeat(5-physiotherapist.rating) {
+            Icon(
+                imageVector = Icons.Default.Star,
+                contentDescription = null, // Descripción opcional para accesibilidad
+                tint = Color.Gray,
+                modifier = Modifier.size(24.dp)
+            )
+        }
+    }
+}
+
