@@ -234,7 +234,7 @@ fun SignUpScreen(navController: NavController) {
                     )
                     val newPatient = Patient(
                         id = 0,
-                        userId = users.value.size,
+                        userId = users.value[users.value.size-1].id+1,
                         firstName = fullName.value.split(' ')[0],
                         lastName = fullName.value.split(' ')[1],
                         appointmentQuantity = 0,
@@ -250,6 +250,7 @@ fun SignUpScreen(navController: NavController) {
                                 val response2 = patientInterface.postNewPatients(newPatient)
                                 if (response.isSuccessful && response2.isSuccessful) {
                                     createMessage.value = "Se guardó el tratamiento"
+                                    navController.navigate("LoginView")
                                 } else {
                                     errorMessage.value =
                                         "Error en la llamada POST. Código de respuesta: ${response.code()}"

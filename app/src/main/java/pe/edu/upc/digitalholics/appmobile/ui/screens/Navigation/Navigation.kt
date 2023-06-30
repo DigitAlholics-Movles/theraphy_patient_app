@@ -18,11 +18,14 @@ import pe.edu.upc.digitalholics.appmobile.data.model.Treatment
 import pe.edu.upc.digitalholics.appmobile.data.model.User
 import pe.edu.upc.digitalholics.appmobile.data.remote.ApiClient
 import pe.edu.upc.digitalholics.appmobile.data.remote.AppointmentResponse
+import pe.edu.upc.digitalholics.appmobile.data.remote.PatientResponse
 import pe.edu.upc.digitalholics.appmobile.data.remote.PhysiotherapistResponse
 import pe.edu.upc.digitalholics.appmobile.data.remote.ReviewResponse
 import pe.edu.upc.digitalholics.appmobile.data.remote.TreatmentResponse
 import pe.edu.upc.digitalholics.appmobile.data.remote.UserResponse
 import pe.edu.upc.digitalholics.appmobile.ui.screens.AddRiew.AddReview
+import pe.edu.upc.digitalholics.appmobile.ui.screens.InitialsViews.EnterCodeScream
+import pe.edu.upc.digitalholics.appmobile.ui.screens.InitialsViews.ForgotPasswordScream
 import pe.edu.upc.digitalholics.appmobile.ui.screens.InitialsViews.LoginScreen
 import pe.edu.upc.digitalholics.appmobile.ui.screens.InitialsViews.SignUpScreen
 import pe.edu.upc.digitalholics.appmobile.ui.screens.PatientProfile.PatientProfile
@@ -43,15 +46,16 @@ import retrofit2.Response
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
+    val randomNumber = remember { mutableStateOf(0) }
 
     NavHost(navController = navController, startDestination = "LoginView") {
 
 
 
         composable("Payment/{index}/{topic}/{date}",
-        arguments = listOf(navArgument("index") { type = NavType.StringType },
-        navArgument("topic") {type = NavType.StringType},
-            navArgument("date") {type = NavType.StringType},
+            arguments = listOf(navArgument("index") { type = NavType.StringType },
+                navArgument("topic") {type = NavType.StringType},
+                navArgument("date") {type = NavType.StringType},
             )
         ) {
 
@@ -97,7 +101,7 @@ fun Navigation() {
 
             Payment(physiotherapist = physiotherapist.value,
                 topic = topic, date = date,
-            navController = navController)
+                navController = navController)
         }
 
         composable("Schedule/{index}",
@@ -293,6 +297,12 @@ fun Navigation() {
         composable("patient"){
             //val index = it.arguments?.getString("index") as String
 
+            val context = LocalContext.current
+            val sharedPreferences = remember {
+                context.getSharedPreferences("mi_pref", Context.MODE_PRIVATE)
+            }
+            val id = sharedPreferences.getString("userLogged", "0")
+
             val patient = remember {
                 mutableStateOf(
                     Patient(0,0,"","",0,"",0,"", " "
@@ -300,8 +310,10 @@ fun Navigation() {
                 )
             }
 
+
+
             val patientInterface = ApiClient.buildPatientInterface()
-            val getPatient = patientInterface.getPatientById("1")
+            val getPatient = patientInterface.getPatientById(id.toString())
 
             getPatient.enqueue(object : Callback<Patient> {
                 override fun onResponse(call: Call<Patient>, response: Response<Patient>) {
@@ -483,8 +495,7 @@ fun Navigation() {
                 context.getSharedPreferences("mi_pref", Context.MODE_PRIVATE)
             }
             val editor = sharedPreferences.edit()
-            editor.putString("userLogged", patientId)
-            editor.apply()
+
 
 //            val patients = remember {
 //                mutableStateOf(emptyList<Patient>())
@@ -493,7 +504,7 @@ fun Navigation() {
                 //mutableStateOf(Patient("1","Jose","Del Carpio","20","30","jose@gmail.com","2","https://img.europapress.es/fotoweb/fotonoticia_20081004164743_420.jpg"))
                 mutableStateOf(emptyList<Treatment>())
             }
-           // val patientInterface = ApiClient.buildPatientInterface()
+            // val patientInterface = ApiClient.buildPatientInterface()
             val treatmentInterface = ApiClient.buildTreatmentInterface()
             val getAllTreatments = treatmentInterface.getAllTreatments()
 
@@ -531,8 +542,16 @@ fun Navigation() {
                 )
             }
 
+
+            val patients2 = remember {
+                //mutableStateOf(Patient("1","Jose","Del Carpio","20","30","jose@gmail.com","2","https://img.europapress.es/fotoweb/fotonoticia_20081004164743_420.jpg"))
+                mutableStateOf(emptyList<Patient>())
+            }
             val driverInterface = ApiClient.buildPatientInterface()
+
+
             val getDriver = driverInterface.getPatientById(patientId)
+            val getAllPatient = driverInterface.getAllPatients()
 
             getDriver.enqueue(object : Callback<Patient> {
                 override fun onResponse(call: Call<Patient>, response: Response<Patient>) {
@@ -544,6 +563,30 @@ fun Navigation() {
                 override fun onFailure(call: Call<Patient>, t: Throwable) {
                 }
             })
+
+            getAllPatient.enqueue(object : Callback<PatientResponse> {
+                override fun onResponse(
+                    call: Call<PatientResponse>,
+                    response: Response<PatientResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        patients2.value = response.body()?.patients!!
+                    }
+                }
+
+                override fun onFailure(call: Call<PatientResponse>, t: Throwable) {
+                }
+            })
+
+            patients2.value.forEach{
+                println("entre")
+                if(it.userId.toString() == patientId){
+                    patients.value = it
+                }
+            }
+            editor.putString("userLogged", patients.value.id.toString())
+            editor.apply()
+
 //            HomePatient(
 //               treatment = treatments.value
 //            )
@@ -628,6 +671,35 @@ fun Navigation() {
             SignUpScreen(navController)
         }
 
+        composable("ForgotPasswordView"){
+
+            val users = remember {
+                mutableStateOf(emptyList<User>())
+            }
+
+            val userInterface = ApiClient.buildUserInterface()
+            val getAllUser = userInterface.getAllUsers()
+
+            getAllUser.enqueue(object : Callback<UserResponse>{
+                override fun onResponse(
+                    call: Call<UserResponse>,
+                    response: Response<UserResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        users.value = response.body()?.users!!
+
+                    }
+                }
+
+                override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                    TODO("Not yet implemented")
+                }
+
+            })
+
+            ForgotPasswordScream(users.value,navController)
+        }
+
         composable("LoginView"){
 
             val users = remember {
@@ -657,6 +729,36 @@ fun Navigation() {
             LoginScreen(users.value,navController)
         }
 
+        composable("EnterCodeView/{userId}/{randomNumber}", arguments = listOf(navArgument("userId") { type = NavType.StringType }, navArgument("randomNumber") { type = NavType.IntType })) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("userId")
+            val randomNumber = backStackEntry.arguments?.getInt("randomNumber") ?: 0
+
+
+            val users = remember {
+                mutableStateOf(emptyList<User>())
+            }
+
+            val userInterface = ApiClient.buildUserInterface()
+            val getAllUser = userInterface.getAllUsers()
+
+            getAllUser.enqueue(object : Callback<UserResponse>{
+                override fun onResponse(
+                    call: Call<UserResponse>,
+                    response: Response<UserResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        users.value = response.body()?.users!!
+
+                    }
+                }
+
+                override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                    TODO("Not yet implemented")
+                }
+
+            })
+
+            EnterCodeScream(users.value,userId = userId, randomNumber = randomNumber, navController)
+        }
     }
 }
-

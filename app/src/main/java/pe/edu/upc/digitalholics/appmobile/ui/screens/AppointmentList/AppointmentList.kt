@@ -115,7 +115,6 @@ navController: NavController){
                 .padding(bottom = 100.dp)
             ) {
                 item {
-
                     Column(modifier = Modifier.padding(17.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                         Row {
                             Box(
@@ -215,10 +214,9 @@ fun AppointmentList2(appointments: List<Appointment>, searchedText: String, dona
         itemsIndexed(appointments){ index, item ->
             if((item.physiotherapist.firstName.uppercase().contains(searchedText.uppercase())
             || item.physiotherapist.paternalSurname.uppercase().contains(searchedText.uppercase())
-                        ) && item.patient.userId.toString() == sharedPreferences.getString("userLogged", "0")
+                        ) && item.patient.id.toString() == sharedPreferences.getString("userLogged", "0")
                 && item.done == dona
             ) {
-
                 AppointmentItem(item) {
                 }
             }
@@ -270,7 +268,7 @@ private fun AppointmentItem(appointment: Appointment, selectAppointment: () -> U
                     contentScale = ContentScale.Crop
                 )
                 Column() {
-                    Text(text = appointment.patient.firstName + " " +appointment.patient.lastName, fontWeight = FontWeight.ExtraBold,
+                    Text(text = appointment.physiotherapist.firstName + " " +appointment.physiotherapist.paternalSurname, fontWeight = FontWeight.ExtraBold,
                         modifier = Modifier.absolutePadding(bottom = 15.dp))
                     Row() {
                         Box(contentAlignment = Alignment.Center,

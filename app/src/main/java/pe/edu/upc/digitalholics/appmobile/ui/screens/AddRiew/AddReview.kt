@@ -1,6 +1,7 @@
 package pe.edu.upc.digitalholics.appmobile.ui.screens.AddRiew
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -46,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -69,6 +71,45 @@ import retrofit2.Response
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AddReview(physiotherapist: Physiotherapist, reviews: List<Review>, navController: NavController, modifier: Modifier = Modifier) {
+
+    val patient = remember {
+        mutableStateOf(
+            Patient(
+                0,
+                0,
+                " ",
+                " ",
+                0,
+                " ",
+                0,
+                " ",
+                " "
+            )
+        )
+    }
+    val patientsInterface = ApiClient.buildPatientInterface()
+
+    val context = LocalContext.current
+    val sharedPreferences = remember {
+        context.getSharedPreferences("mi_pref", Context.MODE_PRIVATE)
+    }
+    val id = sharedPreferences.getString("userLogged", "0")
+
+    val getPatient = patientsInterface.getPatientById(id.toString())
+
+
+    getPatient.enqueue(object : Callback<Patient> {
+        override fun onResponse(call: Call<Patient>, response: Response<Patient>) {
+            if (response.isSuccessful) {
+                patient.value = response.body()!!
+            }
+        }
+
+        override fun onFailure(call: Call<Patient>, t: Throwable) {
+        }
+    })
+
+
 
     Scaffold(
         topBar = {
@@ -185,7 +226,7 @@ fun AddReview(physiotherapist: Physiotherapist, reviews: List<Review>, navContro
                         }
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        NewReview(physiotherapist,reviews)
+                        NewReview(patient.value, physiotherapist,reviews, navController)
 
 
                     }
@@ -212,22 +253,9 @@ fun AddReview(physiotherapist: Physiotherapist, reviews: List<Review>, navContro
 @SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewReview(physiotherapist: Physiotherapist,reviews: List<Review>){
-    val patient = remember {
-        mutableStateOf(
-            Patient(
-                0,
-                0,
-                " ",
-                " ",
-                0,
-                " ",
-                0,
-                " ",
-                " "
-            )
-        )
-    }
+fun NewReview(patient: Patient, physiotherapist: Physiotherapist,reviews: List<Review>,
+navController: NavController){
+
     val errorMessage = remember { mutableStateOf("") }
     val createMessage = remember { mutableStateOf("") }
 
@@ -242,28 +270,23 @@ fun NewReview(physiotherapist: Physiotherapist,reviews: List<Review>){
 
     //Obtencion
     val reviewsInterface = ApiClient.buildReviewInterface()
-    val patientsInterface = ApiClient.buildPatientInterface()
     val coroutineScope = rememberCoroutineScope()
 
+
+
+
+
+
     LaunchedEffect(Unit) {
-        val getPatient = patientsInterface.getPatientById("1")
 
 
-        getPatient.enqueue(object : Callback<Patient> {
-            override fun onResponse(call: Call<Patient>, response: Response<Patient>) {
-                if (response.isSuccessful) {
-                    patient.value = response.body()!!
-                }
-            }
 
-            override fun onFailure(call: Call<Patient>, t: Throwable) {
-            }
-        })
+
     }
 
 
     Text(
-        text = "Review",
+        text = "Review ${patient.firstName}",
         fontWeight = FontWeight.Bold,
         fontSize = 25.sp,
         modifier = Modifier
@@ -323,7 +346,7 @@ fun NewReview(physiotherapist: Physiotherapist,reviews: List<Review>){
                         newReviewId,
                         reviewContent.text,
                         selectedStars,
-                        patient.value,
+                        patient,
                         physiotherapist
                     )
 
@@ -333,6 +356,7 @@ fun NewReview(physiotherapist: Physiotherapist,reviews: List<Review>){
                             val response = reviewsInterface.postNewReview(newReview)
                             if (response.isSuccessful) {
                                 createMessage.value = "Se guardó el tratamiento"
+                                navController.popBackStack()
                             } else {
                                 errorMessage.value =
                                     "Error en la llamada POST. Código de respuesta: ${response.code()}"
@@ -343,6 +367,7 @@ fun NewReview(physiotherapist: Physiotherapist,reviews: List<Review>){
                             errorMessage.value = "Excepción durante la llamada POST: ${e.message}"
                         }
                     }
+                    //navController.popBackStack()
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0, 122, 240)

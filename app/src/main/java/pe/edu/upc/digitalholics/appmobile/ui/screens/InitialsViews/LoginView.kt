@@ -14,20 +14,20 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -37,18 +37,18 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import pe.edu.upc.digitalholics.appmobile.R
 import pe.edu.upc.digitalholics.appmobile.data.model.User
-import java.time.format.TextStyle
+import pe.edu.upc.digitalholics.appmobile.ui.srceens.Schedule.replace
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun LoginScreen(users: List<User>, navController: NavController) {
     Surface(color = Color.White) {
@@ -80,21 +80,44 @@ fun LoginScreen(users: List<User>, navController: NavController) {
 
             Spacer(modifier = Modifier.padding(top = 15.dp))
 
-            val email = remember { mutableStateOf("") }
-            val password = remember { mutableStateOf("") }
+            var email by remember { mutableStateOf(TextFieldValue("")) }
+            var password by remember { mutableStateOf(TextFieldValue("")) }
             val passwordVisibility = remember { mutableStateOf(false) }
             val errorState = remember { mutableStateOf(false) }
+            val emailRegex = Regex("[^\\n]+")
+            val maxPasswordLength = 15
+            val maxEmailLength = 30
 
             OutlinedTextField(
-                value = email.value,
-                onValueChange = { email.value = it },
+                value = email,
+                onValueChange = { newValue ->
+//                    if (newValue.text.matches(emailRegex) && newValue.text.length <= maxEmailLength) {
+//                        email = newValue
+//                    }
+                    if ( newValue.text.contains("\n") && newValue.text != "" ) {
+                        email =  TextFieldValue(newValue.text.replace("\n", ""))
+                    } else {
+                        if(newValue.text.length <= maxEmailLength)
+                            email = newValue
+                    }
+                                },
                 label = { Text("Email") },
                 modifier = Modifier.fillMaxWidth()
             )
 
             OutlinedTextField(
-                value = password.value,
-                onValueChange = { password.value = it },
+                value = password,
+                onValueChange = { newValue ->
+//                    if (newValue.text.matches(emailRegex) && newValue.text.length <= maxPasswordLength) {
+//                        password = newValue
+//                    }
+                    if ( newValue.text.contains("\n") && newValue.text != "" ) {
+                        password =  TextFieldValue(newValue.text.replace("\n", ""))
+                    } else {
+                        if(newValue.text.length <= maxPasswordLength)
+                            password = newValue
+                    }
+                                },
                 label = { Text("Password") },
                 visualTransformation = if (passwordVisibility.value) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -123,23 +146,25 @@ fun LoginScreen(users: List<User>, navController: NavController) {
                         color = Color(29, 35, 102, 500)
                     ),
                     modifier = Modifier.clickable {
-                        // Lógica al hacer clic en el texto
+                        navController.navigate("ForgotPasswordView")
                     }
                 )
             }
 
             Button(
                 onClick = {
-                    if (email.value.isEmpty() || password.value.isEmpty()) {
+                    if (email.text.isEmpty() || password.text.isEmpty()) {
                         errorState.value = true
                     } else {
+                        println("aea");
                         users.forEach{
-                            if(email.value == it.email && password.value==it.password && it.type.lowercase()=="patient"){
+                            println("entre")
+                            if(email.text == it.email && password.text==it.password && it.type.lowercase()=="patient"){
                                 navController.navigate("HomePatient/${it.id}")
                             }
                         }
                     }
-                     },
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 15.dp),
