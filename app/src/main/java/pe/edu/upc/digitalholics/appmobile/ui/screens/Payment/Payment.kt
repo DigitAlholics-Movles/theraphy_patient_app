@@ -177,6 +177,7 @@ fun Payment2(physiotherapist: Physiotherapist,
 
     val patientsInterface = ApiClient.buildPatientInterface()
     val appointmentInterface = ApiClient.buildAppointmentInterface()
+    var patientId = 0
 
     LaunchedEffect(Unit) {
         val getPatient = patientsInterface.getPatientById(id.toString())
@@ -186,6 +187,7 @@ fun Payment2(physiotherapist: Physiotherapist,
             override fun onResponse(call: Call<Patient>, response: Response<Patient>) {
                 if (response.isSuccessful) {
                     patient.value = response.body()!!
+                    patientId = patient.value.userId
                 }
             }
 
@@ -375,7 +377,8 @@ fun Payment2(physiotherapist: Physiotherapist,
                         containerColor = Color(0,122,240)
                     ), modifier = Modifier.absolutePadding(right = 60.dp)
                         ,onClick = { showDialog = false
-                    navController.navigate("HomePatient")}) {
+
+                    navController.navigate("HomePatient/${id}")}) {
                         Text(text = "Go Home")
                     }
                 },

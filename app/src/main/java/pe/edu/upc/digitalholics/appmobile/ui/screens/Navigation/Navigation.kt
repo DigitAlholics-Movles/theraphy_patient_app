@@ -297,6 +297,12 @@ fun Navigation() {
         composable("patient"){
             //val index = it.arguments?.getString("index") as String
 
+            val context = LocalContext.current
+            val sharedPreferences = remember {
+                context.getSharedPreferences("mi_pref", Context.MODE_PRIVATE)
+            }
+            val id = sharedPreferences.getString("userLogged", "0")
+
             val patient = remember {
                 mutableStateOf(
                     Patient(0,0,"","",0,"",0,"", " "
@@ -304,8 +310,10 @@ fun Navigation() {
                 )
             }
 
+
+
             val patientInterface = ApiClient.buildPatientInterface()
-            val getPatient = patientInterface.getPatientById("1")
+            val getPatient = patientInterface.getPatientById(id.toString())
 
             getPatient.enqueue(object : Callback<Patient> {
                 override fun onResponse(call: Call<Patient>, response: Response<Patient>) {
@@ -487,8 +495,7 @@ fun Navigation() {
                 context.getSharedPreferences("mi_pref", Context.MODE_PRIVATE)
             }
             val editor = sharedPreferences.edit()
-            editor.putString("userLogged", patientId)
-            editor.apply()
+
 
 //            val patients = remember {
 //                mutableStateOf(emptyList<Patient>())
@@ -577,7 +584,8 @@ fun Navigation() {
                     patients.value = it
                 }
             }
-
+            editor.putString("userLogged", patients.value.id.toString())
+            editor.apply()
 
 //            HomePatient(
 //               treatment = treatments.value
