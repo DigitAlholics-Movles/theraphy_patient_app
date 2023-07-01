@@ -1,6 +1,7 @@
 package pe.edu.upc.digitalholics.appmobile.ui.screens.TreatmentDetails
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -46,6 +47,14 @@ import coil.compose.AsyncImage
 import pe.edu.upc.digitalholics.appmobile.data.model.Treatment
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.launch
+import pe.edu.upc.digitalholics.appmobile.data.model.Patient
+import pe.edu.upc.digitalholics.appmobile.data.model.TreatmentByPatient
+import pe.edu.upc.digitalholics.appmobile.data.remote.ApiClient
 import pe.edu.upc.digitalholics.appmobile.ui.screens.FooterStructure
 
 @Composable
@@ -59,7 +68,7 @@ fun Treatments(treatments: List<Treatment>){
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TreatmentDetails(treatment: Treatment, navController: NavController) {
+fun TreatmentDetails(treatment: Treatment, navController: NavController, enrolled: Boolean) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -80,7 +89,7 @@ fun TreatmentDetails(treatment: Treatment, navController: NavController) {
                         TreatmentDetailImage(treatment = treatment)
                     }
                     item {
-                        TreatmentDescription(treatment = treatment)
+                        TreatmentDescription(treatment = treatment, navController = navController, enrolled = enrolled)
                     }
                 }
             }
@@ -129,10 +138,18 @@ fun TreatmentDetailImage(
 }
 
 @Composable
-fun TreatmentDescription(
-    treatment: Treatment,
-    modifier: Modifier = Modifier
-) {
+fun TreatmentDescription(treatment: Treatment, modifier: Modifier = Modifier, navController: NavController, enrolled: Boolean) {
+
+    val treatmentByPatientInterface = ApiClient.buildTreatmentByPatientInterface()
+
+    val context = LocalContext.current
+    val sharedPreferences = remember {
+        context.getSharedPreferences("mi_pref", Context.MODE_PRIVATE)
+    }
+    val id = sharedPreferences.getString("userLogged", "0")
+    val coroutineScope = rememberCoroutineScope()
+    val errorMessage = remember { mutableStateOf("") }
+    val createMessage = remember { mutableStateOf("") }
     Spacer(modifier = modifier.height(20.dp))
     Row(modifier = modifier) {
         Spacer(modifier = modifier.width(28.dp))
@@ -155,8 +172,60 @@ fun TreatmentDescription(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ) {
-        Button(onClick = { /* acción al hacer clic en el botón */ }) {
-            Text(text = "Enroll")
+        Button(
+            enabled = !enrolled,
+            onClick = {
+
+            val newTreatmentByPatientId = "0"
+            val patient = Patient(
+                id!!.toInt(),
+                0,
+                " ",
+                "20",
+                0,
+                "jose@gmail.com",
+                0,
+                "https://img.europapress.es/fotoweb/fotonoticia_20081004164743_420.jpg",
+                ""
+            )
+
+            val newTreatment = TreatmentByPatient(
+                newTreatmentByPatientId,
+                treatment,
+                patient,
+                "2023-07-01",
+                0.0
+
+            )
+
+            coroutineScope.launch {
+
+                try {
+                    val response = treatmentByPatientInterface.postNewTreatmentByPatient(newTreatment)
+                    if (response.isSuccessful) {
+                        createMessage.value = "Se guardó el tratamiento"
+                        navController.popBackStack()
+                    } else {
+                        errorMessage.value =
+                            "Error en la llamada POST. Código de respuesta: ${response.code()}"
+                        val errorBody = response.errorBody()?.string()
+                        errorBody?.let { errorMessage.value += newTreatment }
+                    }
+                } catch (e: Exception) {
+                    errorMessage.value = "Excepción durante la llamada POST: ${e.message}"
+                }
+            }
+
+        /* acción al hacer clic en el botón */
+        }
+
+
+        ) {
+            if(!enrolled){
+                Text(text = "Enroll")
+            }else{
+                Text(text = "Already added treatment")
+            }
         }
     }
 }

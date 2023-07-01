@@ -29,6 +29,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 
 import androidx.compose.ui.Modifier
@@ -38,6 +39,12 @@ import androidx.compose.ui.text.font.FontWeight
 
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import pe.edu.upc.digitalholics.appmobile.data.model.Patient
+import pe.edu.upc.digitalholics.appmobile.data.remote.ApiClient
+import pe.edu.upc.digitalholics.appmobile.data.remote.PatientInterface
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -96,6 +103,38 @@ fun FooterStructure(navController: NavController){
     }
     val id = sharedPreferences.getString("userLogged", "0")
 
+    val patients = remember {
+        mutableStateOf(
+            Patient(
+                0,
+                0,
+                " ",
+                "20",
+                0,
+                "jose@gmail.com",
+                0,
+                "https://img.europapress.es/fotoweb/fotonoticia_20081004164743_420.jpg",
+                ""
+            )
+        )
+    }
+
+    val driverInterface = ApiClient.buildPatientInterface()
+    val getDriver = driverInterface.getPatientById(id!!)
+
+    getDriver.enqueue(object : Callback<Patient> {
+        override fun onResponse(call: Call<Patient>, response: Response<Patient>) {
+            if (response.isSuccessful) {
+                patients.value = response.body()!!
+            }
+        }
+
+        override fun onFailure(call: Call<Patient>, t: Throwable) {
+        }
+    })
+
+
+
     Spacer(modifier = Modifier.padding(4.dp))
     Surface(
         modifier = Modifier
@@ -109,7 +148,7 @@ fun FooterStructure(navController: NavController){
         color = Color.White
     ) {
         Row(modifier = Modifier.padding(10.dp)) {
-            IconButton(onClick = { navController.navigate("HomePatient/${id}") }) {
+            IconButton(onClick = { navController.navigate("HomePatient/${patients.value.userId}") }) {
                 Icon(imageVector = Icons.Default.Home, contentDescription = null)
             }
             Spacer(modifier = Modifier.width(30.dp))

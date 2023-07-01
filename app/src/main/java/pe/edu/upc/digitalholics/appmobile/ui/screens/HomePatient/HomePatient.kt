@@ -3,10 +3,8 @@ package pe.edu.upc.digitalholics.appmobile.ui.srceens.HomePatient
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +13,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -25,7 +22,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.ArrowBack
 
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Face
@@ -34,7 +30,6 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 
 import androidx.compose.material3.Icon
@@ -50,8 +45,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalMapOf
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -60,16 +53,17 @@ import pe.edu.upc.digitalholics.appmobile.R
 import pe.edu.upc.digitalholics.appmobile.data.model.Patient
 import pe.edu.upc.digitalholics.appmobile.data.model.Physiotherapist
 import pe.edu.upc.digitalholics.appmobile.data.model.Treatment
+import pe.edu.upc.digitalholics.appmobile.data.model.TreatmentByPatient
 import pe.edu.upc.digitalholics.appmobile.ui.screens.FooterStructure
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Home( modifier: Modifier = Modifier,
-          treatments: List<Treatment>,
-          selectTreatment: (String) -> Unit, patient: Patient, physiotherapist: Physiotherapist,
-          navController: NavController
+fun Home(modifier: Modifier = Modifier,
+         treatments: List<TreatmentByPatient>,
+         selectTreatment: (String) -> Unit, patient: Patient, physiotherapist: Physiotherapist,
+         navController: NavController
 ){
     Scaffold(
         topBar = {
@@ -118,7 +112,7 @@ fun Home( modifier: Modifier = Modifier,
 
 @Composable
 fun HomePatient(
-    treatments: List<Treatment>,
+    treatments: List<TreatmentByPatient>,
     navController: NavController,
     selectTreatment: (String) -> Unit, patient: Patient, physiotherapist: Physiotherapist
 ) {
@@ -129,7 +123,7 @@ fun HomePatient(
 
         LazyRow() {
             itemsIndexed(treatments) { index, item ->
-                MyTreatments2(item, navController) {
+                MyTreatments2(item.treatment, navController) {
                     selectTreatment("${index + 1}")
                 }
             }

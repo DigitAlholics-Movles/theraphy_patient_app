@@ -1,5 +1,6 @@
 package pe.edu.upc.digitalholics.appmobile.ui.screens.Navigation
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -15,12 +16,14 @@ import pe.edu.upc.digitalholics.appmobile.data.model.Patient
 import pe.edu.upc.digitalholics.appmobile.data.model.Physiotherapist
 import pe.edu.upc.digitalholics.appmobile.data.model.Review
 import pe.edu.upc.digitalholics.appmobile.data.model.Treatment
+import pe.edu.upc.digitalholics.appmobile.data.model.TreatmentByPatient
 import pe.edu.upc.digitalholics.appmobile.data.model.User
 import pe.edu.upc.digitalholics.appmobile.data.remote.ApiClient
 import pe.edu.upc.digitalholics.appmobile.data.remote.AppointmentResponse
 import pe.edu.upc.digitalholics.appmobile.data.remote.PatientResponse
 import pe.edu.upc.digitalholics.appmobile.data.remote.PhysiotherapistResponse
 import pe.edu.upc.digitalholics.appmobile.data.remote.ReviewResponse
+import pe.edu.upc.digitalholics.appmobile.data.remote.TreatmentByPatientResponse
 import pe.edu.upc.digitalholics.appmobile.data.remote.TreatmentResponse
 import pe.edu.upc.digitalholics.appmobile.data.remote.UserResponse
 import pe.edu.upc.digitalholics.appmobile.ui.screens.AddRiew.AddReview
@@ -43,6 +46,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
@@ -291,7 +295,52 @@ fun Navigation() {
                 }
             })
 
-            TreatmentDetails(treatment = treatment.value,navController)
+
+
+            val treatments = remember {
+                //mutableStateOf(Patient("1","Jose","Del Carpio","20","30","jose@gmail.com","2","https://img.europapress.es/fotoweb/fotonoticia_20081004164743_420.jpg"))
+                mutableStateOf(emptyList<TreatmentByPatient>())
+            }
+
+
+            val treatmentInterface2 = ApiClient.buildTreatmentByPatientInterface()
+            val getTreatmentByPatientId = treatmentInterface2.getTreatmentsByPatient()
+            val context = LocalContext.current
+            val sharedPreferences = remember {
+                context.getSharedPreferences("mi_pref", Context.MODE_PRIVATE)
+            }
+            val id = sharedPreferences.getString("userLogged", "0")
+            getTreatmentByPatientId.enqueue(object : Callback<TreatmentByPatientResponse> {
+                override fun onResponse(
+                    call: Call<TreatmentByPatientResponse>,
+                    response: Response<TreatmentByPatientResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        treatments.value = response.body()?.treatmentsByPatient!!
+
+                    }
+//                    else{
+//                        mutableStateOf(Treatment("1", "title", "description", "https://www.metropolsalud.com/wp-content/uploads/2021/07/diatermia.jpg", "4", Physiotherapist(1, "Nombre", "", "", 40, 45, "", "", "", 30, "", "", 5))
+//                    }
+                }
+                //                patient.value = response.body()!!
+
+
+                override fun onFailure(call: Call<TreatmentByPatientResponse>, t: Throwable) {
+
+                }
+            })
+
+
+            treatments.value = treatments.value.filter { it.patient.id == id!!.toInt() }
+            var enrolled = false
+                treatments.value.forEach {
+                if(it.treatment.id ==  treatment.value.id){
+                    enrolled = true
+                }
+            }
+
+            TreatmentDetails(treatment = treatment.value,navController, enrolled)
         }
 
         composable("patient"){
@@ -502,29 +551,18 @@ fun Navigation() {
 //            }
             val treatments = remember {
                 //mutableStateOf(Patient("1","Jose","Del Carpio","20","30","jose@gmail.com","2","https://img.europapress.es/fotoweb/fotonoticia_20081004164743_420.jpg"))
-                mutableStateOf(emptyList<Treatment>())
+                mutableStateOf(emptyList<TreatmentByPatient>())
             }
             // val patientInterface = ApiClient.buildPatientInterface()
-            val treatmentInterface = ApiClient.buildTreatmentInterface()
-            val getAllTreatments = treatmentInterface.getAllTreatments()
 
-            getAllTreatments.enqueue(object : Callback<TreatmentResponse> {
-                override fun onResponse(
-                    call: Call<TreatmentResponse>,
-                    response: Response<TreatmentResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        treatments.value = response.body()?.treatments!!
-
-                    }
-                }
-
-                override fun onFailure(call: Call<TreatmentResponse>, t: Throwable) {
-
-                }
-            })
 
 //            val index = it.arguments?.getString("index") as String
+
+//            val treatments2 = remember {
+//                mutableStateOf(Patient(1,1,"Del Carpio","20",30,"jose@gmail.com",2,"https://img.europapress.es/fotoweb/fotonoticia_20081004164743_420.jpg"))
+////                mutableStateOf(emptyList<TreatmentByPatient>())
+//            }
+
 
             val patients = remember {
                 mutableStateOf(
@@ -564,6 +602,7 @@ fun Navigation() {
                 }
             })
 
+
             getAllPatient.enqueue(object : Callback<PatientResponse> {
                 override fun onResponse(
                     call: Call<PatientResponse>,
@@ -586,6 +625,37 @@ fun Navigation() {
             }
             editor.putString("userLogged", patients.value.id.toString())
             editor.apply()
+
+
+
+            val treatmentInterface = ApiClient.buildTreatmentByPatientInterface()
+            val getTreatmentByPatientId = treatmentInterface.getTreatmentsByPatient()
+
+            getTreatmentByPatientId.enqueue(object : Callback<TreatmentByPatientResponse> {
+                override fun onResponse(
+                    call: Call<TreatmentByPatientResponse>,
+                    response: Response<TreatmentByPatientResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        treatments.value = response.body()?.treatmentsByPatient!!
+
+                    }
+//                    else{
+//                        mutableStateOf(Treatment("1", "title", "description", "https://www.metropolsalud.com/wp-content/uploads/2021/07/diatermia.jpg", "4", Physiotherapist(1, "Nombre", "", "", 40, 45, "", "", "", 30, "", "", 5))
+//                    }
+                }
+                //                patient.value = response.body()!!
+
+
+                override fun onFailure(call: Call<TreatmentByPatientResponse>, t: Throwable) {
+                    TODO("Not yet implemented")
+                }
+            })
+
+
+
+
+
 
 //            HomePatient(
 //               treatment = treatments.value
@@ -656,7 +726,7 @@ fun Navigation() {
 //            })
 
             Home(
-                treatments = treatments.value,
+                treatments = treatments.value.filter { it.patient.id == patients.value.id },
                 selectTreatment = { index ->
                     navController.navigate("treatment/$index")
                 },
@@ -762,3 +832,5 @@ fun Navigation() {
         }
     }
 }
+
+

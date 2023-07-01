@@ -12,4 +12,8 @@ interface TreatmentInterface {
     @GET("treatments/{index}")
     fun getTreatmentById(@Path("index")index: String): Call<Treatment>
 
+
+//    @GET("treatments_by_patient/{patientId}")
+//    fun getTreatmentByPatientId(@Path("patientId")patientId: String): Call<TreatmentResponse>
+
 }

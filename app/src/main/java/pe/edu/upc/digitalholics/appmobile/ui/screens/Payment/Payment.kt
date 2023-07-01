@@ -378,8 +378,8 @@ fun Payment2(physiotherapist: Physiotherapist,
                     ), modifier = Modifier.absolutePadding(right = 60.dp)
                         ,onClick = { showDialog = false
 
-                    navController.navigate("HomePatient/${id}")}) {
-                        Text(text = "Go Home")
+                    navController.navigate("physiotherapistList")}) {
+                        Text(text = "Go Back")
                     }
                 },
                 modifier = Modifier.padding(16.dp)
